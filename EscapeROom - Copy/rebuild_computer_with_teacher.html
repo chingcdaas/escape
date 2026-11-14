@@ -1,0 +1,2124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HACKED // Rebuild the Computer</title>
+
+<style>
+:root {
+  --red: #ff454e;
+  --green: #48e69b;
+  --panel: #170e13;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 30px 16px 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: radial-gradient(
+    ellipse at 50% 10%,
+    #371019,
+    #09090c 65%
+  );
+}
+
+.heading {
+  text-align: center;
+  max-width: 650px;
+}
+
+.subtitle {
+  color: #ff616a;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+h1 {
+  color: var(--red);
+  text-shadow: 0 0 18px #bd0000;
+  font-size: clamp(26px, 5vw, 39px);
+  margin: 10px 0;
+}
+
+.instructions {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.game {
+  width: 100%;
+  max-width: 800px;
+  padding: 22px;
+  margin-top: 20px;
+  background: #140d11;
+  border: 1px solid #b43a42;
+  border-radius: 14px;
+  box-shadow: 0 0 35px #7a151b55;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.tag {
+  font-size: 12px;
+  color: #ff9da3;
+  letter-spacing: 1px;
+}
+
+.progress {
+  height: 9px;
+  background: #3a1d24;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.fill {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #b92131,
+    #ff6971
+  );
+  transition: width 0.3s;
+}
+
+.order-panel {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #211319;
+  border: 1px solid #78313c;
+  border-radius: 10px;
+}
+
+.order-title {
+  color: #ff9ba1;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.order-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.order-step {
+  padding: 9px 11px;
+  background: #311b24;
+  border: 1px solid #78313c;
+  border-radius: 7px;
+  color: #cbb6bd;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.order-step.current {
+  border-color: #ff6971;
+  color: white;
+  box-shadow: 0 0 12px #ff454e44;
+}
+
+.order-step.done {
+  border-color: #36d48a;
+  background: #113026;
+  color: #8effc4;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 90px;
+}
+
+#wireLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 3;
+}
+
+#wireLayer path {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  opacity: 0.95;
+}
+
+.section {
+  position: relative;
+  background: #211319;
+  border: 1px solid #78313c;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.section h2 {
+  margin: 0 0 14px;
+  color: #ff9ba1;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.parts,
+.slots {
+  display: grid;
+  gap: 12px;
+}
+
+.part {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 58px;
+  padding: 13px;
+  background: #311b24;
+  border: 1px solid #b34a57;
+  border-radius: 9px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.part:hover,
+.part.selected {
+  border-color: #ff707a;
+  box-shadow: 0 0 16px #d3384b55;
+}
+
+.part.installed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.part.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.emoji {
+  font-size: 26px;
+}
+
+.part strong {
+  display: block;
+  font-size: 15px;
+}
+
+.part small {
+  color: #b7a5aa;
+  font-size: 11px;
+}
+
+.slot {
+  min-height: 58px;
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #170e13;
+  border: 2px dashed #a64a57;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.slot.over {
+  border-color: #ff828a;
+  background: #4d202c;
+}
+
+.slot.good {
+  border-color: #36d48a;
+  background: #113026;
+  color: #8effc4;
+}
+
+.slot.bad {
+  animation: shake 0.3s;
+  border-color: red;
+}
+
+.port {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.hint {
+  color: #a38d94;
+  font-size: 11px;
+  text-align: right;
+}
+
+@keyframes shake {
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.status {
+  min-height: 50px;
+  padding: 17px 8px 5px;
+  text-align: center;
+  color: #ffb1b7;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.status.success {
+  color: var(--green);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+button {
+  padding: 13px 22px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #f34650;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.start {
+  background: #15803d;
+}
+
+.start:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+.back {
+  background: transparent;
+  border: 1px solid #e34b54;
+}
+
+.footer {
+  margin-top: 20px;
+  color: #777;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+/* ORIGINAL TEACHER DESIGN */
+
+.teacher-area {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  z-index: 8;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  max-width: min(550px, calc(100vw - 20px));
+  pointer-events: none;
+  animation: teacherAppear 0.8s ease-out;
+}
+
+.teacher-image {
+  display: block;
+  width: clamp(100px, 15vw, 150px);
+  max-height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px #0009);
+}
+
+.teacher-message {
+  position: relative;
+  align-self: center;
+  background: white;
+  color: #171717;
+  border: 3px solid #171717;
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-size: clamp(13px, 2vw, 18px);
+  font-weight: 900;
+  line-height: 1.35;
+  max-width: 200px;
+  box-shadow: 5px 5px 0 #0008;
+}
+
+.teacher-message::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-left: 3px solid #171717;
+  border-bottom: 3px solid #171717;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.teacher-message[hidden] {
+  display: none;
+}
+
+@keyframes teacherAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* RESULT SCREEN */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: #050507ed;
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.result {
+  width: 100%;
+  max-width: 470px;
+  padding: 35px 22px;
+  text-align: center;
+  background: #101a17;
+  border: 2px solid #42e69a;
+  border-radius: 16px;
+  box-shadow: 0 0 60px #16ba6b50;
+}
+
+.result h2 {
+  color: #6dffb0;
+  font-size: 35px;
+}
+
+.result p {
+  color: #bcebd3;
+}
+
+.code {
+  font-size: 65px;
+  font-weight: bold;
+  letter-spacing: 10px;
+  color: white;
+  text-shadow: 0 0 18px #2eff91;
+  margin: 20px 0;
+}
+
+.result.failed {
+  background: #270d15;
+  border-color: #ff4355;
+}
+
+.result.failed h2 {
+  color: #ff6574;
+}
+
+.result-teacher {
+  display: block;
+  max-height: 170px;
+  max-width: 180px;
+  width: auto;
+  margin: 0 auto 8px;
+  object-fit: contain;
+}
+
+.result-teacher[hidden] {
+  display: none;
+}
+
+/* SHARED TIMER */
+
+#escapeRoomTimer {
+  position: sticky;
+  top: 10px;
+  z-index: 5;
+  align-self: flex-end;
+  padding: 10px 16px;
+  background: #210d15;
+  border: 2px solid #ff4545;
+  border-radius: 10px;
+  color: #ff777f;
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 0 18px #ff000044;
+  font-variant-numeric: tabular-nums;
+}
+
+#escapeRoomTimer.urgent {
+  background: #850000;
+  color: white;
+  animation: blink 0.6s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+/* TIMEOUT SCREEN */
+
+#escapeRoomTimeout {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(
+    ellipse at center,
+    #3c101b,
+    #09090c 75%
+  );
+  color: white;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+}
+
+#escapeRoomTimeout h2 {
+  font-size: clamp(32px, 7vw, 56px);
+  color: #ff454e;
+  text-shadow: 0 0 22px #ff0000;
+}
+
+#escapeRoomTimeout p {
+  color: #ffb1b7;
+}
+
+@media (max-width: 560px) {
+  .game {
+    padding: 13px;
+  }
+
+  .board {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .parts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .part {
+    padding: 10px;
+  }
+
+  .code {
+    font-size: 48px;
+  }
+
+  .teacher-area {
+    left: 5px;
+    bottom: 5px;
+    gap: 8px;
+  }
+
+  .teacher-image {
+    width: 105px;
+    max-height: 145px;
+  }
+
+  .teacher-message {
+    padding: 10px 12px;
+    max-width: 185px;
+    font-size: 12px;
+  }
+
+  #escapeRoomTimer {
+    align-self: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="escapeRoomTimer">
+  ⏰ ESCAPE ROOM 15:00
+</div>
+
+<!-- TEACHER -->
+<div class="teacher-area" aria-live="polite">
+  <img
+    class="teacher-image"
+    id="teacherImage"
+    src="Thinking.png"
+    alt="Teacher thinking"
+  >
+
+  <div class="teacher-message" id="teacherMessage">
+    Hmm... maybe start it!
+  </div>
+</div>
+
+<header class="heading">
+  <p class="subtitle">
+    HACKED // EASY CHALLENGE
+  </p>
+
+  <h1>🖥️ REBUILD THE COMPUTER</h1>
+
+  <p class="instructions">
+    Security has disabled the motherboard.
+    <br>
+    Press START GAME and install 8 random components.
+    <br>
+    Match each component to its correct socket
+    <strong>in the assembly order shown below.</strong>
+    <br>
+    A wrong connection or wrong order resets
+    your installation progress to 0/8!
+    <br>
+    Boot the computer before the shared
+    escape-room timer ends.
+  </p>
+</header>
+
+<main class="game">
+
+  <div class="top">
+    <span class="tag">
+      SYSTEM:
+      <span id="system">STANDBY</span>
+    </span>
+
+    <span class="tag" id="count">
+      0 / 8 INSTALLED
+    </span>
+  </div>
+
+  <div class="progress">
+    <div class="fill" id="fill"></div>
+  </div>
+
+  <!-- ASSEMBLY ORDER -->
+  <div class="order-panel">
+    <div class="order-title">
+      ◈ REQUIRED ASSEMBLY ORDER ◈
+    </div>
+
+    <div class="order-list" id="orderList"></div>
+  </div>
+
+  <div class="board" id="board">
+
+    <svg id="wireLayer" aria-hidden="true"></svg>
+
+    <section class="section">
+      <h2>01 // HARDWARE COMPONENTS</h2>
+      <div class="parts" id="parts"></div>
+    </section>
+
+    <section class="section">
+      <h2>02 // MOTHERBOARD SOCKETS</h2>
+      <div class="slots" id="slots"></div>
+    </section>
+
+  </div>
+
+  <div class="status" id="status" role="status">
+    Press START GAME to begin.
+  </div>
+
+  <div class="actions">
+    <button class="start" id="startBtn">
+      ▶ START GAME
+    </button>
+
+    <button id="bootBtn" disabled>
+      ⚡ BOOT COMPUTER
+    </button>
+
+    <button id="resetBtn">
+      ↻ RESET
+    </button>
+
+    <button class="back" id="backBtn">
+      ← BACK TO CHALLENGES
+    </button>
+  </div>
+
+</main>
+
+<p class="footer">
+  HACKED // ESCAPE ROOM
+</p>
+
+<!-- SUCCESS SCREEN -->
+<div class="overlay" id="overlay">
+  <div class="result" id="result">
+
+    <img
+      id="resultTeacher"
+      class="result-teacher"
+      src="Joyful.png"
+      alt="Teacher celebrating"
+      hidden
+    >
+
+    <p
+      id="resultTeacherMessage"
+      style="font-weight:bold;color:#6dffb0"
+      hidden
+    >
+      YAY! WE GOT THE ANSWER!
+    </p>
+
+    <div style="font-size:50px" id="resultIcon">
+      🔓
+    </div>
+
+    <h2 id="resultTitle">
+      ACCESS GRANTED!
+    </h2>
+
+    <p id="resultMessage">
+      COMPUTER REBUILT • SYSTEM ONLINE
+    </p>
+
+    <p id="codeLabel">
+      YOUR COLLECTED LETTERS
+    </p>
+
+    <div class="code" id="resultCode">
+      ---
+    </div>
+
+    <p id="resultFooter">
+      Challenge completed successfully.
+    </p>
+
+    <button id="continueBtn">
+      CONTINUE
+    </button>
+
+  </div>
+</div>
+
+<!-- OVERALL TIMEOUT -->
+<div id="escapeRoomTimeout">
+  <div style="font-size:75px">⏰</div>
+
+  <h2>TIME'S UP!</h2>
+
+  <h3>YOU DIDN'T ESCAPE THE ROOM!</h3>
+
+  <p>The 15-minute countdown has ended.</p>
+
+  <button id="restartEscapeBtn">
+    ↻ TRY AGAIN
+  </button>
+</div>
+
+<script>
+"use strict";
+
+// ========================================
+// SETTINGS
+// ========================================
+
+const COMPONENT_COUNT = 6;
+
+const ESCAPE_END_KEY = "escapeRoomEndTime";
+const ESCAPE_TIMEOUT_KEY = "escapeRoomTimedOut";
+const ESCAPE_FINISHED_KEY = "escapeRoomFinished";
+
+const ESCAPE_DURATION = 15 * 60 * 1000;
+
+const TASKS_KEY = "easyRandomTasks";
+const GAME_KEY = "easyRandomGameWord";
+
+let overallEscapeExpired = false;
+
+const get = id => document.getElementById(id);
+
+// ========================================
+// SHARED ESCAPE TIMER
+// ========================================
+
+const savedDeadline = Number(
+  sessionStorage.getItem(ESCAPE_END_KEY)
+);
+
+if (
+  !Number.isFinite(savedDeadline) ||
+  savedDeadline <= 0
+) {
+  sessionStorage.setItem(
+    ESCAPE_END_KEY,
+    String(Date.now() + ESCAPE_DURATION)
+  );
+}
+
+function escapeTimeAvailable() {
+  if (overallEscapeExpired) return false;
+
+  if (
+    sessionStorage.getItem(ESCAPE_TIMEOUT_KEY) === "true"
+  ) {
+    showOverallTimeout();
+    return false;
+  }
+
+  const deadline = Number(
+    sessionStorage.getItem(ESCAPE_END_KEY)
+  );
+
+  if (
+    !Number.isFinite(deadline) ||
+    Date.now() >= deadline
+  ) {
+    showOverallTimeout();
+    return false;
+  }
+
+  return true;
+}
+
+function updateOverallEscapeTimer() {
+  if (overallEscapeExpired) return;
+
+  const deadline = Number(
+    sessionStorage.getItem(ESCAPE_END_KEY)
+  );
+
+  if (
+    !Number.isFinite(deadline) ||
+    sessionStorage.getItem(ESCAPE_TIMEOUT_KEY) === "true"
+  ) {
+    showOverallTimeout();
+    return;
+  }
+
+  const remaining = Math.max(
+    0,
+    deadline - Date.now()
+  );
+
+  const secondsLeft = Math.ceil(remaining / 1000);
+
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+
+  const display = get("escapeRoomTimer");
+
+  display.textContent =
+    "⏰ ESCAPE ROOM " +
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(seconds).padStart(2, "0");
+
+  display.classList.toggle(
+    "urgent",
+    secondsLeft <= 60
+  );
+
+  if (remaining <= 0) {
+    showOverallTimeout();
+  }
+}
+
+function showOverallTimeout() {
+  if (overallEscapeExpired) return;
+
+  overallEscapeExpired = true;
+
+  sessionStorage.setItem(
+    ESCAPE_TIMEOUT_KEY,
+    "true"
+  );
+
+  cancelWireDrag();
+
+  get("escapeRoomTimer").textContent =
+    "⏰ ESCAPE ROOM 00:00";
+
+  get("escapeRoomTimeout").style.display = "flex";
+}
+
+// ========================================
+// SHARED SECRET WORD
+// ========================================
+
+const WORD_POOL = [
+  "ALGORITHMS",
+  "AUTOMATION",
+  "BLOCKCHAIN",
+  "BOOTLOADER",
+  "CLUSTERING",
+  "CONTAINERS",
+  "CONTROLLER",
+  "DATACENTER",
+  "DEPLOYMENT",
+  "DEVELOPERS",
+  "EXECUTABLE",
+  "FILESYSTEM",
+  "HARDDRIVES",
+  "HYPERVISOR",
+  "JAVASCRIPT",
+  "KUBERNETES",
+  "MAINFRAMES",
+  "MICROCHIPS",
+  "MIDDLEWARE",
+  "MONITORING",
+  "NETWORKING",
+  "PARAMETERS",
+  "POWERSHELL",
+  "PROCESSING",
+  "PROCESSORS",
+  "PROGRAMMER",
+  "REPOSITORY",
+  "RESOLUTION",
+  "SEMAPHORES",
+  "SERVERLESS",
+  "SIMULATION",
+  "SUBROUTINE",
+  "TECHNOLOGY",
+  "THROUGHPUT",
+  "TRANSISTOR",
+  "TYPESCRIPT",
+  "VERSIONING",
+  "WEBMASTERS",
+  "WORKSPACES"
+].filter(word => word.length === 10);
+
+function getSharedSecretWord() {
+  let word = sessionStorage.getItem("secretWord");
+
+  if (!word || !/^[A-Z]{10}$/.test(word)) {
+    word = WORD_POOL[
+      Math.floor(Math.random() * WORD_POOL.length)
+    ];
+
+    sessionStorage.setItem("secretWord", word);
+  }
+
+  return word;
+}
+
+const secretWord = getSharedSecretWord();
+
+// EASY owns only the first 3 letters.
+const easyLetters = secretWord.slice(0, 3);
+
+// ========================================
+// SCRAMBLED EASY REWARD
+// ========================================
+
+function scrambleReward(letters) {
+  const key = "easyRewardLetters";
+  const saved = sessionStorage.getItem(key);
+
+  if (
+    saved &&
+    [...saved].sort().join("") ===
+    [...letters].sort().join("")
+  ) {
+    return saved;
+  }
+
+  const mixed = [...letters];
+
+  for (let i = mixed.length - 1; i > 0; i--) {
+    const j = Math.floor(
+      Math.random() * (i + 1)
+    );
+
+    [mixed[i], mixed[j]] = [
+      mixed[j],
+      mixed[i]
+    ];
+  }
+
+  if (
+    mixed.join("") === letters &&
+    new Set(mixed).size > 1
+  ) {
+    const index = mixed.findIndex(
+      letter => letter !== mixed[0]
+    );
+
+    [mixed[0], mixed[index]] = [
+      mixed[index],
+      mixed[0]
+    ];
+  }
+
+  const reward = mixed.join("");
+
+  sessionStorage.setItem(key, reward);
+
+  return reward;
+}
+
+// ========================================
+// ALL 30 ORIGINAL COMPONENTS
+// ========================================
+
+const allComponents = [
+  {
+    id: "cpu",
+    color: "#ff5555",
+    name: "CPU",
+    detail: "Processor",
+    icon: "🧠",
+    slot: "I am the brain of the computer."
+  },
+  {
+    id: "ram",
+    color: "#3b82f6",
+    name: "RAM",
+    detail: "Memory",
+    icon: "💾",
+    slot: "I hold information while you work."
+  },
+  {
+    id: "gpu",
+    color: "#eab308",
+    name: "GPU",
+    detail: "Graphics card",
+    icon: "🎮",
+    slot: "I help show pictures and games."
+  },
+  {
+    id: "ssd",
+    color: "#22c55e",
+    name: "SSD",
+    detail: "Storage",
+    icon: "📀",
+    slot: "I keep your files when the computer is off."
+  },
+  {
+    id: "motherboard",
+    color: "#a855f7",
+    name: "MOTHERBOARD",
+    detail: "Main circuit board",
+    icon: "🔌",
+    slot: "I connect all the computer components together."
+  },
+  {
+    id: "psu",
+    color: "#f97316",
+    name: "POWER SUPPLY",
+    detail: "PSU",
+    icon: "⚡",
+    slot: "I supply electricity to the computer."
+  },
+  {
+    id: "fan",
+    color: "#06b6d4",
+    name: "COOLING FAN",
+    detail: "Cooling",
+    icon: "🌬️",
+    slot: "I move air to cool computer parts."
+  },
+  {
+    id: "hdd",
+    color: "#ec4899",
+    name: "HDD",
+    detail: "Hard disk",
+    icon: "💽",
+    slot: "I store files on spinning magnetic disks."
+  },
+  {
+    id: "network",
+    color: "#84cc16",
+    name: "NETWORK CARD",
+    detail: "Networking",
+    icon: "🌐",
+    slot: "I connect a computer to a network."
+  },
+  {
+    id: "sound",
+    color: "#14b8a6",
+    name: "SOUND CARD",
+    detail: "Audio",
+    icon: "🎵",
+    slot: "I process sound for speakers and headphones."
+  },
+  {
+    id: "heatsink",
+    color: "#f59e0b",
+    name: "HEAT SINK",
+    detail: "Heat control",
+    icon: "🌡️",
+    slot: "I carry heat away from computer chips."
+  },
+  {
+    id: "optical",
+    color: "#8b5cf6",
+    name: "OPTICAL DRIVE",
+    detail: "Disc reader",
+    icon: "💿",
+    slot: "I read CDs and DVDs."
+  },
+  {
+    id: "wifi",
+    color: "#38bdf8",
+    name: "WI-FI ADAPTER",
+    detail: "Wireless",
+    icon: "📶",
+    slot: "I connect to wireless networks."
+  },
+  {
+    id: "battery",
+    color: "#fb7185",
+    name: "CMOS BATTERY",
+    detail: "Clock power",
+    icon: "🔋",
+    slot: "I keep the computer clock running when powered off."
+  },
+  {
+    id: "case",
+    color: "#c084fc",
+    name: "COMPUTER CASE",
+    detail: "Enclosure",
+    icon: "🗄️",
+    slot: "I protect and hold the internal parts."
+  },
+  {
+    id: "ethernet",
+    color: "#2dd4bf",
+    name: "ETHERNET PORT",
+    detail: "Wired connection",
+    icon: "🔗",
+    slot: "I connect a network cable to the computer."
+  },
+  {
+    id: "bios",
+    color: "#f472b6",
+    name: "BIOS CHIP",
+    detail: "Startup firmware",
+    icon: "🔧",
+    slot: "I help start the computer before the operating system loads."
+  },
+  {
+    id: "usb",
+    color: "#60a5fa",
+    name: "USB PORT",
+    detail: "Peripheral connection",
+    icon: "🔌",
+    slot: "I let you plug in flash drives, mice, and keyboards."
+  },
+  {
+    id: "keyboard",
+    color: "#facc15",
+    name: "KEYBOARD",
+    detail: "Typing device",
+    icon: "⌨️",
+    slot: "I let you type letters, numbers, and commands."
+  },
+  {
+    id: "mouse",
+    color: "#4ade80",
+    name: "MOUSE",
+    detail: "Pointing device",
+    icon: "🖱️",
+    slot: "I move the pointer and click items on the screen."
+  },
+  {
+    id: "monitor",
+    color: "#a78bfa",
+    name: "MONITOR",
+    detail: "Display device",
+    icon: "🖥️",
+    slot: "I display text, pictures, and videos for you to see."
+  },
+  {
+    id: "webcam",
+    color: "#fb923c",
+    name: "WEBCAM",
+    detail: "Video input",
+    icon: "📷",
+    slot: "I capture live video for online calls."
+  },
+  {
+    id: "microphone",
+    color: "#2dd4bf",
+    name: "MICROPHONE",
+    detail: "Audio input",
+    icon: "🎤",
+    slot: "I turn your voice into an audio signal the computer can use."
+  },
+  {
+    id: "speakers",
+    color: "#f87171",
+    name: "SPEAKERS",
+    detail: "Audio output",
+    icon: "🔊",
+    slot: "I play music, voices, and other sounds out loud."
+  },
+  {
+    id: "printer",
+    color: "#818cf8",
+    name: "PRINTER",
+    detail: "Paper output",
+    icon: "🖨️",
+    slot: "I put digital documents and pictures onto paper."
+  },
+  {
+    id: "scanner",
+    color: "#34d399",
+    name: "SCANNER",
+    detail: "Image input",
+    icon: "📄",
+    slot: "I turn a paper document into a digital image."
+  },
+  {
+    id: "flashdrive",
+    color: "#fbbf24",
+    name: "USB FLASH DRIVE",
+    detail: "Portable storage",
+    icon: "💾",
+    slot: "I carry files between computers in a small removable device."
+  },
+  {
+    id: "thermalpaste",
+    color: "#c084fc",
+    name: "THERMAL PASTE",
+    detail: "Heat transfer",
+    icon: "🧴",
+    slot: "I fill tiny gaps so heat moves better from a chip to its cooler."
+  },
+  {
+    id: "router",
+    color: "#38bdf8",
+    name: "ROUTER",
+    detail: "Network traffic",
+    icon: "📡",
+    slot: "I direct data between your home network and other networks."
+  },
+  {
+    id: "ups",
+    color: "#fb7185",
+    name: "UPS",
+    detail: "Backup power",
+    icon: "🔋",
+    slot: "I provide temporary battery power during an electricity outage."
+  }
+];
+
+// ========================================
+// RANDOMIZE COMPONENTS
+// ========================================
+
+function shuffle(array) {
+  const copy = [...array];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(
+      Math.random() * (i + 1)
+    );
+
+    [copy[i], copy[j]] = [
+      copy[j],
+      copy[i]
+    ];
+  }
+
+  return copy;
+}
+
+// Keep the same random set during one
+// escape-room session.
+
+if (
+  sessionStorage.getItem(GAME_KEY) !== secretWord
+) {
+  sessionStorage.removeItem(TASKS_KEY);
+  sessionStorage.setItem(GAME_KEY, secretWord);
+}
+
+let chosenIds;
+
+try {
+  chosenIds = JSON.parse(
+    sessionStorage.getItem(TASKS_KEY)
+  );
+} catch {
+  chosenIds = null;
+}
+
+// IMPORTANT: exactly 8 unique components.
+
+if (
+  !Array.isArray(chosenIds) ||
+  chosenIds.length !== COMPONENT_COUNT ||
+  new Set(chosenIds).size !== COMPONENT_COUNT ||
+  chosenIds.some(
+    id => !allComponents.some(
+      part => part.id === id
+    )
+  )
+) {
+  chosenIds = shuffle(allComponents)
+    .slice(0, COMPONENT_COUNT)
+    .map(part => part.id);
+
+  sessionStorage.setItem(
+    TASKS_KEY,
+    JSON.stringify(chosenIds)
+  );
+}
+
+const components = chosenIds.map(
+  id => allComponents.find(
+    part => part.id === id
+  )
+);
+
+// The saved random sequence is the
+// required installation order.
+
+const assemblyOrder = [...chosenIds];
+
+// ========================================
+// GAME STATE
+// ========================================
+
+let installed = new Set();
+let selected = null;
+let started = false;
+let won = false;
+let draggingWire = null;
+
+// ========================================
+// STATUS
+// ========================================
+
+function showStatus(message, success = false) {
+  get("status").textContent = message;
+
+  get("status").classList.toggle(
+    "success",
+    success
+  );
+}
+
+function nextRequiredComponent() {
+  const nextId = assemblyOrder[installed.size];
+
+  return components.find(
+    component => component.id === nextId
+  ) || null;
+}
+
+// ========================================
+// ASSEMBLY ORDER DISPLAY
+// ========================================
+
+function updateAssemblyOrder() {
+  const holder = get("orderList");
+  holder.replaceChildren();
+
+  assemblyOrder.forEach((id, index) => {
+    const component = components.find(
+      part => part.id === id
+    );
+
+    const step = document.createElement("div");
+    step.className = "order-step";
+
+    if (index < installed.size) {
+      step.classList.add("done");
+    } else if (index === installed.size) {
+      step.classList.add("current");
+    }
+
+    const prefix = index < installed.size
+      ? "✓"
+      : `${index + 1}.`;
+
+    step.textContent = `${prefix} ${component.name}`;
+
+    holder.appendChild(step);
+  });
+}
+
+// ========================================
+// PROGRESS
+// ========================================
+
+function updateProgress() {
+  const count = installed.size;
+
+  get("count").textContent =
+    `${count} / ${COMPONENT_COUNT} INSTALLED`;
+
+  get("fill").style.width =
+    `${(count / COMPONENT_COUNT) * 100}%`;
+
+  get("bootBtn").disabled =
+    !started || won || count !== COMPONENT_COUNT;
+
+  updateAssemblyOrder();
+
+  if (
+    count === COMPONENT_COUNT &&
+    started &&
+    !won
+  ) {
+    get("system").textContent = "READY TO BOOT";
+
+    showStatus(
+      "✓ All 6 components installed! Press BOOT COMPUTER.",
+      true
+    );
+  }
+}
+
+// ========================================
+// RESET INSTALLATION PROGRESS ONLY
+// ========================================
+
+function resetInstallationProgress(message) {
+  cancelWireDrag();
+
+  installed.clear();
+  selected = null;
+
+  document.querySelectorAll(".part").forEach(
+    part => {
+      part.classList.remove(
+        "installed",
+        "selected"
+      );
+    }
+  );
+
+  document.querySelectorAll(".slot").forEach(
+    slot => {
+      slot.classList.remove(
+        "good",
+        "bad",
+        "over"
+      );
+
+      slot.querySelector(".hint").textContent =
+        "EMPTY";
+    }
+  );
+
+  get("wireLayer").replaceChildren();
+
+  get("system").textContent = "OFFLINE";
+
+  updateProgress();
+
+  showStatus(message);
+}
+
+// ========================================
+// INSTALL COMPONENT
+// ========================================
+
+function installComponent(componentId, slotId) {
+  if (!escapeTimeAvailable()) return;
+  if (!started || won) return;
+
+  if (!componentId || installed.has(componentId)) {
+    return;
+  }
+
+  const slot = document.querySelector(
+    `.slot[data-id="${slotId}"]`
+  );
+
+  if (!slot || slot.classList.contains("good")) {
+    return;
+  }
+
+  const required = nextRequiredComponent();
+
+  // BOTH the socket AND assembly order
+  // must be correct.
+
+  const correctSocket = componentId === slotId;
+
+  const correctOrder =
+    required &&
+    componentId === required.id;
+
+  if (!correctSocket || !correctOrder) {
+    slot.classList.remove("bad");
+    void slot.offsetWidth;
+    slot.classList.add("bad");
+
+    const message = !correctSocket
+      ? "✕ WRONG SOCKET! Progress reset to 0/8."
+      : `✕ WRONG ORDER! Install ${required.name} next. Progress reset to 0/8.`;
+
+    resetInstallationProgress(message);
+
+    return;
+  }
+
+  // Correct component and correct order.
+
+  installed.add(componentId);
+
+  slot.classList.add("good");
+
+  slot.querySelector(".hint").textContent =
+    "✓ INSTALLED";
+
+  const part = document.querySelector(
+    `.part[data-id="${componentId}"]`
+  );
+
+  if (part) {
+    part.classList.add("installed");
+  }
+
+  selected = null;
+
+  document.querySelectorAll(".part").forEach(
+    item => item.classList.remove("selected")
+  );
+
+  showStatus(
+    `✓ ${required.name} installed correctly!`,
+    true
+  );
+
+  updateProgress();
+  drawWires();
+}
+
+// ========================================
+// CREATE BOARD
+// ========================================
+
+function createBoard() {
+  get("parts").replaceChildren();
+  get("slots").replaceChildren();
+
+  // Parts are visually shuffled.
+
+  for (const component of shuffle(components)) {
+    const part = document.createElement("div");
+
+    part.className = "part disabled";
+    part.dataset.id = component.id;
+    part.tabIndex = 0;
+
+    part.innerHTML = `
+      <span class="emoji">${component.icon}</span>
+      <span>
+        <strong>${component.name}</strong>
+        <small>${component.detail}</small>
+      </span>
+    `;
+
+    part.addEventListener("click", () => {
+      if (!escapeTimeAvailable()) return;
+      if (!started || won) return;
+      if (installed.has(component.id)) return;
+
+      selected = component.id;
+
+      document.querySelectorAll(".part").forEach(
+        item => {
+          item.classList.toggle(
+            "selected",
+            item.dataset.id === component.id
+          );
+        }
+      );
+
+      showStatus(
+        `Selected ${component.name}. Choose its socket.`
+      );
+    });
+
+    part.addEventListener(
+      "pointerdown",
+      event => {
+        if (!started || won) return;
+        if (installed.has(component.id)) return;
+        if (!escapeTimeAvailable()) return;
+
+        beginWireDrag(event, part, component);
+      }
+    );
+
+    part.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          part.click();
+        }
+      }
+    );
+
+    get("parts").appendChild(part);
+  }
+
+  // Sockets are shuffled independently.
+
+  for (const component of shuffle(components)) {
+    const slot = document.createElement("div");
+
+    slot.className = "slot";
+    slot.dataset.id = component.id;
+    slot.tabIndex = 0;
+
+    slot.innerHTML = `
+      <span class="port">${component.slot}</span>
+      <span class="hint">EMPTY</span>
+    `;
+
+    slot.addEventListener("click", () => {
+      installComponent(selected, component.id);
+    });
+
+    slot.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          slot.click();
+        }
+      }
+    );
+
+    get("slots").appendChild(slot);
+  }
+}
+
+// ========================================
+// ORIGINAL WIRE POSITIONS
+// ========================================
+
+function wirePoint(element, fromStart) {
+  const boardRect = get("board")
+    .getBoundingClientRect();
+
+  const rect = element.getBoundingClientRect();
+
+  const stacked = window.matchMedia(
+    "(max-width: 560px)"
+  ).matches;
+
+  return {
+    x: (
+      stacked
+        ? rect.left + rect.width / 2
+        : (fromStart ? rect.right : rect.left)
+    ) - boardRect.left,
+
+    y: (
+      stacked
+        ? (fromStart ? rect.bottom : rect.top)
+        : rect.top + rect.height / 2
+    ) - boardRect.top
+  };
+}
+
+function wireCurve(a, b) {
+  const stacked = window.matchMedia(
+    "(max-width: 560px)"
+  ).matches;
+
+  if (stacked) {
+    const middle = (a.y + b.y) / 2;
+
+    return (
+      `M ${a.x} ${a.y} ` +
+      `C ${a.x} ${middle}, ` +
+      `${b.x} ${middle}, ${b.x} ${b.y}`
+    );
+  }
+
+  const middle = (a.x + b.x) / 2;
+
+  return (
+    `M ${a.x} ${a.y} ` +
+    `C ${middle} ${a.y}, ` +
+    `${middle} ${b.y}, ${b.x} ${b.y}`
+  );
+}
+
+// ========================================
+// LIVE DRAGGING WIRES
+// ========================================
+
+function beginWireDrag(event, part, component) {
+  if (draggingWire) return;
+
+  event.preventDefault();
+
+  const path = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+  );
+
+  path.setAttribute(
+    "stroke",
+    component.color
+  );
+
+  get("wireLayer").appendChild(path);
+
+  draggingWire = {
+    pointerId: event.pointerId,
+    part,
+    component,
+    path
+  };
+
+  moveWireDrag(event);
+
+  window.addEventListener(
+    "pointermove",
+    moveWireDrag
+  );
+
+  window.addEventListener(
+    "pointerup",
+    finishWireDrag
+  );
+
+  window.addEventListener(
+    "pointercancel",
+    cancelWireDrag
+  );
+}
+
+function moveWireDrag(event) {
+  if (
+    !draggingWire ||
+    event.pointerId !== draggingWire.pointerId
+  ) {
+    return;
+  }
+
+  const rect = get("board")
+    .getBoundingClientRect();
+
+  const start = wirePoint(
+    draggingWire.part,
+    true
+  );
+
+  const end = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+
+  draggingWire.path.setAttribute(
+    "d",
+    wireCurve(start, end)
+  );
+}
+
+function cancelWireDrag() {
+  if (!draggingWire) return;
+
+  draggingWire.path.remove();
+  draggingWire = null;
+
+  window.removeEventListener(
+    "pointermove",
+    moveWireDrag
+  );
+
+  window.removeEventListener(
+    "pointerup",
+    finishWireDrag
+  );
+
+  window.removeEventListener(
+    "pointercancel",
+    cancelWireDrag
+  );
+}
+
+function finishWireDrag(event) {
+  if (
+    !draggingWire ||
+    event.pointerId !== draggingWire.pointerId
+  ) {
+    return;
+  }
+
+  const componentId = draggingWire.component.id;
+
+  const target = document.elementFromPoint(
+    event.clientX,
+    event.clientY
+  );
+
+  const slot = target && target.closest(".slot");
+
+  cancelWireDrag();
+
+  if (slot) {
+    installComponent(
+      componentId,
+      slot.dataset.id
+    );
+  }
+}
+
+// ========================================
+// DRAW COMPLETED WIRES
+// ========================================
+
+function drawWires() {
+  if (draggingWire) return;
+
+  const svg = get("wireLayer");
+
+  svg.replaceChildren();
+
+  for (const component of components) {
+    if (!installed.has(component.id)) {
+      continue;
+    }
+
+    const part = document.querySelector(
+      `.part[data-id="${component.id}"]`
+    );
+
+    const slot = document.querySelector(
+      `.slot[data-id="${component.id}"]`
+    );
+
+    if (!part || !slot) continue;
+
+    const a = wirePoint(part, true);
+    const b = wirePoint(slot, false);
+
+    const path = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+
+    path.setAttribute(
+      "d",
+      wireCurve(a, b)
+    );
+
+    path.setAttribute(
+      "stroke",
+      component.color
+    );
+
+    svg.appendChild(path);
+  }
+}
+
+window.addEventListener(
+  "resize",
+  drawWires
+);
+
+// ========================================
+// ORIGINAL TEACHER REACTIONS
+// ========================================
+
+function setTeacher(state) {
+  const image = get("teacherImage");
+  const message = get("teacherMessage");
+
+  const reactions = {
+    thinking: [
+      "Thinking.png",
+      "Teacher thinking",
+      "Hmm... maybe start it!"
+    ],
+    watching: [
+      "Watching.png",
+      "Teacher watching",
+      ""
+    ],
+    joyful: [
+      "Joyful.png",
+      "Teacher celebrating",
+      "YAY! WE GOT THE ANSWER!"
+    ]
+  };
+
+  const [src, alt, words] = reactions[state];
+
+  image.src = src;
+  image.alt = alt;
+
+  message.textContent = words;
+  message.hidden = !words;
+}
+
+// ========================================
+// START GAME
+// ========================================
+
+function startGame() {
+  if (!escapeTimeAvailable()) return;
+  if (started || won) return;
+
+  started = true;
+
+  setTeacher("watching");
+
+  get("startBtn").disabled = true;
+
+  get("system").textContent = "OFFLINE";
+
+  document.querySelectorAll(".part").forEach(
+    part => part.classList.remove("disabled")
+  );
+
+  const required = nextRequiredComponent();
+
+  showStatus(
+    `Game started! Install ${required.name} first.`
+  );
+
+  updateProgress();
+}
+
+// ========================================
+// SUCCESS RESULT
+// ========================================
+
+function showResult() {
+  get("result").classList.remove("failed");
+
+  get("resultIcon").textContent = "🔓";
+
+  get("resultTitle").textContent =
+    "ACCESS GRANTED!";
+
+  get("resultMessage").textContent =
+    "COMPUTER REBUILT • SYSTEM ONLINE";
+
+  get("codeLabel").textContent =
+    "YOUR COLLECTED LETTERS";
+
+  get("resultCode").textContent =
+    scrambleReward(easyLetters);
+
+  get("resultFooter").textContent =
+    "Challenge completed successfully.";
+
+  get("continueBtn").textContent =
+    "CONTINUE";
+
+  get("resultTeacher").hidden = false;
+
+  get("resultTeacherMessage").hidden = false;
+
+  get("overlay").classList.add("show");
+}
+
+// ========================================
+// BOOT COMPUTER
+// ========================================
+
+function bootComputer() {
+  if (!escapeTimeAvailable()) return;
+  if (!started || won) return;
+
+  if (installed.size !== COMPONENT_COUNT) {
+    return;
+  }
+
+  won = true;
+  started = false;
+
+  setTeacher("joyful");
+
+  get("system").textContent = "ONLINE";
+  get("bootBtn").disabled = true;
+
+  sessionStorage.setItem(
+    "easyComplete",
+    "true"
+  );
+
+  showResult();
+}
+
+// ========================================
+// RESET EASY GAME
+// ========================================
+
+function resetGame() {
+  if (!escapeTimeAvailable()) return;
+
+  cancelWireDrag();
+
+  installed.clear();
+
+  selected = null;
+  started = false;
+  won = false;
+
+  setTeacher("thinking");
+
+  get("startBtn").disabled = false;
+  get("system").textContent = "STANDBY";
+
+  get("overlay").classList.remove("show");
+
+  createBoard();
+  drawWires();
+  updateProgress();
+
+  showStatus(
+    "Press START GAME to begin."
+  );
+}
+
+// ========================================
+// BUTTON EVENTS
+// ========================================
+
+get("startBtn").addEventListener(
+  "click",
+  startGame
+);
+
+get("bootBtn").addEventListener(
+  "click",
+  bootComputer
+);
+
+get("resetBtn").addEventListener(
+  "click",
+  resetGame
+);
+
+get("backBtn").addEventListener(
+  "click",
+  () => {
+    if (!escapeTimeAvailable()) return;
+
+    window.location.href = "screen4.html";
+  }
+);
+
+get("continueBtn").addEventListener(
+  "click",
+  () => {
+    if (!escapeTimeAvailable()) return;
+
+    window.location.href = "screen4.html";
+  }
+);
+
+// ========================================
+// FULL ESCAPE ROOM RESTART
+// ONLY AFTER TIMEOUT
+// ========================================
+
+get("restartEscapeBtn").addEventListener(
+  "click",
+  () => {
+    const keysToClear = [
+      ESCAPE_END_KEY,
+      ESCAPE_TIMEOUT_KEY,
+      ESCAPE_FINISHED_KEY,
+
+      "easyComplete",
+      "mediumComplete",
+      "hardComplete",
+
+      "secretWord",
+
+      "easyRewardLetters",
+      "mediumRewardLetters",
+      "hardRewardLetters",
+
+      TASKS_KEY,
+      GAME_KEY,
+
+      "easyRandomSeconds",
+      "easyTaskIds",
+      "easyTimerSeconds",
+
+      "hardAttemptsUsed",
+      "hardAttemptsWord"
+    ];
+
+    for (const key of keysToClear) {
+      sessionStorage.removeItem(key);
+    }
+
+    window.location.href = "screen4.html";
+  }
+);
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+updateOverallEscapeTimer();
+
+setInterval(
+  updateOverallEscapeTimer,
+  250
+);
+
+if (!overallEscapeExpired) {
+  resetGame();
+}
+
+</script>
+</body>
+</html>

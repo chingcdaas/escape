@@ -1,0 +1,286 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICS Escape Room</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+body.fade-out {
+  opacity: 0;
+}
+body {
+  background: #000;
+  font-family: "Courier New", monospace;
+  color: white;
+    opacity: 1;
+  transition: opacity 1.5s ease-in-out; /* Adjust 1.5s to make it slower or faster */
+}
+
+/* RED MATRIX BACKGROUND */
+
+#matrix {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* MAIN CONTENT */
+
+.intro {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* RED TITLE */
+
+.title {
+  font-size: clamp(38px, 7vw, 90px);
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: #ff2020;
+  text-shadow:
+    0 0 10px #ff0000,
+    0 0 25px #ff0000,
+    0 0 60px #8b0000;
+  margin: 0 0 55px;
+  animation: titleGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px #ff0000,
+      0 0 25px #ff0000;
+  }
+
+  50% {
+    text-shadow:
+      0 0 20px #ff0000,
+      0 0 50px #ff0000,
+      0 0 80px #ff0000;
+  }
+}
+
+/* RED START BUTTON */
+
+.start-button {
+  background: rgba(0, 0, 0, 0.85);
+  color: #ff2020;
+  border: 3px solid #ff2020;
+  border-radius: 12px;
+  padding: 20px 65px;
+  font-family: "Courier New", monospace;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  cursor: pointer;
+  box-shadow:
+    0 0 15px #ff0000,
+    inset 0 0 12px rgba(255, 0, 0, 0.2);
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.start-button:hover {
+  transform: scale(1.08);
+  background: #ff2020;
+  color: #000;
+  box-shadow:
+    0 0 25px #ff0000,
+    0 0 60px #ff0000;
+}
+
+.start-button:active {
+  transform: scale(0.96);
+}
+
+/* SUBTITLE */
+
+.subtitle {
+  margin-top: 35px;
+  color: #ffaaaa;
+  font-size: 15px;
+  letter-spacing: 3px;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  .title {
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+  }
+
+  .start-button {
+    font-size: 24px;
+    padding: 17px 45px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- RED MATRIX RAIN -->
+
+<canvas id="matrix"></canvas>
+
+<div class="overlay"></div>
+
+<!-- INTRO SCREEN -->
+
+<main class="intro">
+
+  <h1 class="title">
+    ICS ESCAPE ROOM
+  </h1>
+
+  <button
+    class="start-button"
+    type="button"
+    onclick="startGame()"
+  >
+    START
+  </button>
+
+  <p class="subtitle">
+    PRESS START TO ENTER
+  </p>
+
+</main>
+
+<script>
+/* RED MATRIX RAIN */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+const characters =
+  "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@";
+
+const fontSize = 18;
+
+let columns;
+let drops;
+
+function resizeMatrix() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  columns = Math.ceil(canvas.width / fontSize);
+
+  drops = Array.from(
+    { length: columns },
+    () => Math.random() * -50
+  );
+}
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#ff2020";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const character =
+      characters[
+        Math.floor(Math.random() * characters.length)
+      ];
+
+    ctx.fillText(
+      character,
+      i * fontSize,
+      drops[i] * fontSize
+    );
+
+    if (
+      drops[i] * fontSize > canvas.height &&
+      Math.random() > 0.975
+    ) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+}
+
+resizeMatrix();
+
+window.addEventListener("resize", resizeMatrix);
+
+setInterval(drawMatrix, 45);
+
+/* START GAME */
+
+function startGame() {
+  // 1. Trigger the fade-out animation
+  document.body.classList.add("fade-out");
+
+  // 2. Wait for the transition to finish (1500ms = 1.5 seconds) before redirecting
+  setTimeout(function() {
+    window.location.href = "intro.html";
+  }, 1500); 
+}
+</script>
+
+</body>
+</html>

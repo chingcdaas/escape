@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RIT Computer Lab - HACKED</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #050000;
+  color: #ff2020;
+  font-family: "Courier New", monospace;
+  cursor: pointer;
+}
+
+/* RED MATRIX BACKGROUND */
+
+#matrix {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.75;
+}
+
+/* DARK RED OVERLAY */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(
+      circle at center,
+      transparent 10%,
+      rgba(20, 0, 0, 0.55) 65%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+  pointer-events: none;
+}
+
+/* RED SCREEN FLASH */
+
+.flash {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(255, 0, 0, 0.15);
+  pointer-events: none;
+  animation: flashScreen 2s infinite;
+}
+
+@keyframes flashScreen {
+  0%, 85%, 100% {
+    opacity: 0;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  91% {
+    opacity: 0;
+  }
+
+  94% {
+    opacity: 0.6;
+  }
+}
+
+/* MAIN CONTENT */
+
+.hacker-scene {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* WARNING TITLE */
+
+.warning {
+  font-size: clamp(28px, 6vw, 75px);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #ff1717;
+  text-shadow:
+    0 0 8px #ff0000,
+    0 0 22px #ff0000,
+    0 0 45px #8b0000;
+  animation: glitch 1.4s infinite;
+  margin: 0;
+}
+
+@keyframes glitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+  }
+
+  92% {
+    transform: translate(-4px, 2px);
+  }
+
+  94% {
+    transform: translate(4px, -2px);
+  }
+
+  96% {
+    transform: translate(-2px, -2px);
+  }
+}
+
+/* HOODED HACKER */
+
+.hacker {
+  position: relative;
+  width: 220px;
+  height: 260px;
+  margin: 20px auto;
+  filter: drop-shadow(0 0 28px #c00000);
+  animation: hackerFloat 3s ease-in-out infinite;
+}
+
+@keyframes hackerFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* HOOD */
+
+.hood {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 190px;
+  height: 210px;
+  background: linear-gradient(
+    135deg,
+    #292929,
+    #080808 65%,
+    #000
+  );
+  border: 4px solid #5e0000;
+  border-radius: 50% 50% 35% 35%;
+  box-shadow:
+    inset 0 0 30px #000,
+    0 0 20px #800000;
+}
+
+/* BLACK FACE */
+
+.face {
+  position: absolute;
+  top: 65px;
+  left: 53px;
+  width: 114px;
+  height: 120px;
+  background: #000;
+  border-radius: 45%;
+  box-shadow: inset 0 0 20px #1a0000;
+}
+
+/* GLOWING EYES */
+
+.eye {
+  position: absolute;
+  top: 46px;
+  width: 24px;
+  height: 9px;
+  background: #ff1111;
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px red,
+    0 0 25px red;
+  transform: rotate(10deg);
+}
+
+.eye.left {
+  left: 18px;
+}
+
+.eye.right {
+  right: 18px;
+  transform: rotate(-10deg);
+}
+
+/* HACKER SHOULDERS */
+
+.shoulders {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  height: 95px;
+  background: linear-gradient(
+    #171717,
+    #000
+  );
+  border-radius: 60% 60% 15% 15%;
+  border: 3px solid #390000;
+  z-index: -1;
+}
+
+/* EVIL LAUGH */
+
+.laugh {
+  font-size: clamp(22px, 4vw, 46px);
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin: 5px 0 20px;
+  color: #ff3333;
+  text-shadow: 0 0 15px red;
+  animation: laughShake 0.3s infinite alternate;
+}
+
+@keyframes laughShake {
+  from {
+    transform: rotate(-1deg);
+  }
+
+  to {
+    transform: rotate(1deg);
+  }
+}
+
+/* CLICK TO ESCAPE */
+
+.escape {
+  position: absolute;
+  bottom: 30px;
+  color: #ddd;
+  font-size: 14px;
+  letter-spacing: 2px;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* MOBILE */
+
+@media (max-height: 650px) {
+  .hacker {
+    transform: scale(0.7);
+    margin: -10px auto;
+  }
+
+  .hacker-scene {
+    justify-content: space-around;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- RED FALLING MATRIX CODE -->
+
+<canvas id="matrix"></canvas>
+
+<!-- DARK ATMOSPHERE -->
+
+<div class="overlay"></div>
+
+<!-- RED FLASH -->
+
+<div class="flash"></div>
+
+<!-- HACKER TRAP -->
+
+<main class="hacker-scene">
+
+  <h1 class="warning">
+    YOU ARE STUCK IN HERE!
+  </h1>
+
+  <!-- SCARY HOODED HACKER -->
+
+  <div class="hacker">
+
+    <div class="shoulders"></div>
+
+    <div class="hood"></div>
+
+    <div class="face">
+
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+
+    </div>
+
+  </div>
+
+  <h2 class="laugh">
+    MWAHAHAHAHAHA!!!
+  </h2>
+
+
+</main>
+
+<script>
+/* RED MATRIX RAIN */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+const letters =
+  "01ABCDEF#$%&@RITERRORHACKED";
+
+const fontSize = 17;
+
+let columns;
+let drops;
+
+function resizeMatrix() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  columns = Math.ceil(canvas.width / fontSize);
+
+  drops = Array(columns).fill(0).map(() =>
+    Math.random() * -50
+  );
+}
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  ctx.fillStyle = "#ff1717";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+
+    const character =
+      letters[Math.floor(Math.random() * letters.length)];
+
+    ctx.fillText(
+      character,
+      i * fontSize,
+      drops[i] * fontSize
+    );
+
+    if (
+      drops[i] * fontSize > canvas.height &&
+      Math.random() > 0.975
+    ) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+}
+
+resizeMatrix();
+
+window.addEventListener(
+  "resize",
+  resizeMatrix
+);
+
+setInterval(drawMatrix, 45);
+
+/* CLICK ANYWHERE TO GO BACK */
+
+function goBack() {
+  window.location.href = "screen2.html";
+}
+
+setTimeout(goBack, 3000);
+</script>
+
+</body>
+</html>

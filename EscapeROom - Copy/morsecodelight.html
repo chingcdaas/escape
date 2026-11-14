@@ -1,0 +1,1286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HACKED // Signal Recovery</title>
+
+  <style>
+    :root {
+      --red: #ff4656;
+      --background: #09090d;
+      --panel: #180e14;
+      --muted: #b8a7ad;
+      --green: #54e9a0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 65px 14px 180px;
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      background: radial-gradient(
+        ellipse at 50% 0%,
+        #3d111e 0%,
+        #120b11 45%,
+        #08090c 85%
+      );
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0 31px,
+          #ff4d5509 32px 33px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 31px,
+          #ff4d5506 32px 33px
+        );
+    }
+
+    .page {
+      width: 100%;
+      max-width: 620px;
+    }
+
+    /* TEACHER */
+
+    .teacher-area {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      z-index: 30;
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      pointer-events: none;
+      animation: teacherAppear 0.8s ease-out;
+    }
+
+    .teacher-image {
+      display: block;
+      width: clamp(100px, 22vw, 150px);
+      max-height: 40vh;
+      object-fit: contain;
+      filter: drop-shadow(0 5px 15px #000);
+    }
+
+    .teacher-message {
+      position: relative;
+      max-width: 200px;
+      padding: 14px 18px;
+      margin-bottom: 65px;
+      background: white;
+      color: #222;
+      border: 3px solid #111;
+      border-radius: 18px;
+      font-size: clamp(13px, 1.8vw, 17px);
+      font-weight: 900;
+      line-height: 1.4;
+      box-shadow: 5px 5px 0 #0007;
+    }
+
+    .teacher-message::before {
+      content: "";
+      position: absolute;
+      left: -13px;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-left: 3px solid #111;
+      border-bottom: 3px solid #111;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes teacherAppear {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* MAIN GAME */
+
+    .game {
+      position: relative;
+      width: 100%;
+      padding: 28px 26px;
+      text-align: center;
+      background: linear-gradient(155deg, #1d1019, #100c12);
+      border: 1px solid #a33a4b;
+      border-radius: 16px;
+      box-shadow:
+        0 18px 65px #000a,
+        0 0 35px #8f182b44;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #ff8891;
+      letter-spacing: 3px;
+      font-weight: bold;
+    }
+
+    h1 {
+      color: var(--red);
+      font-size: clamp(26px, 6vw, 37px);
+      margin: 10px 0;
+      text-shadow: 0 0 22px #d51d3d88;
+    }
+
+    .instructions {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin: 12px auto 18px;
+    }
+
+    /* SIGNAL PANEL */
+
+    .signal-panel {
+      margin: 20px 0 16px;
+      padding: 19px 14px;
+      background: linear-gradient(#25131d, #150d13);
+      border: 1px solid #6c2937;
+      border-radius: 13px;
+    }
+
+    .signal-panel::before {
+      content: "SIGNAL RECEIVER // ACTIVE";
+      display: block;
+      text-align: left;
+      color: #c98190;
+      font: bold 10px monospace;
+      letter-spacing: 2px;
+    }
+
+    .bulb {
+      width: 112px;
+      height: 112px;
+      margin: 24px auto 20px;
+      border-radius: 50%;
+      border: 5px solid #59303c;
+      background: radial-gradient(
+        circle at 38% 30%,
+        #58303c,
+        #21131b 60%,
+        #100b0f
+      );
+      box-shadow: inset 0 0 22px black;
+      transition: background 0.08s, box-shadow 0.08s;
+    }
+
+    .bulb.on {
+      background: radial-gradient(
+        circle at 38% 30%,
+        #fff8d0,
+        #ffe762 35%,
+        #ff9a32 75%
+      );
+      border-color: #ffd65d;
+      box-shadow:
+        0 0 30px #ffeb3b,
+        0 0 85px #ff9b30aa;
+    }
+
+    .letter {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #ffe5e8;
+    }
+
+    #playStatus {
+      min-height: 22px;
+      margin: 12px 0 3px;
+      color: #bba5ad;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    /* BUTTONS */
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    button {
+      min-height: 44px;
+      padding: 12px 17px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: 1px solid #e84e5c;
+      border-radius: 7px;
+      background: linear-gradient(#dc3447, #aa1c2d);
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #ffbdc3;
+      outline-offset: 3px;
+    }
+
+    .play {
+      background: #1d6d47;
+      border-color: #35bb7a;
+    }
+
+
+    .next {
+      background: #244b89;
+      border-color: #4c83d9;
+    }
+
+    .hint {
+      background: #4a2637;
+      border-color: #b95d7d;
+    }
+
+    .back {
+      width: 100%;
+      max-width: 290px;
+      margin-top: 12px;
+      background: transparent;
+      border: 1px solid #a94c5b;
+    }
+
+    /* ANSWER */
+
+    .answer-label {
+      margin-top: 24px;
+      color: #ff8b98;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 12px auto 0;
+      padding: 15px;
+      background: #0b0b10;
+      border: 1px solid #9c4152;
+      border-radius: 8px;
+      color: white;
+      text-align: center;
+      font-size: 19px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+
+    #unlockBtn {
+      min-width: 205px;
+    }
+
+    /* FEEDBACK */
+
+    #feedback {
+      display: none;
+      margin: 17px 0;
+      padding: 20px 12px;
+      border: 2px solid;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    #feedback.error {
+      display: block;
+      color: #ff909a;
+      background: #3d111e;
+      border-color: #ff4656;
+    }
+
+    #feedback.success {
+      display: block;
+      color: #6bffc0;
+      background: #103424;
+      border-color: #36d48a;
+    }
+
+    /* MORSE HINT */
+
+    .hint-box {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      background: #21131b;
+      border: 1px solid #9d3e50;
+      border-radius: 10px;
+    }
+
+    .hint-box.visible {
+      display: block;
+    }
+
+    .hint-box strong {
+      color: #ff9aa4;
+      letter-spacing: 2px;
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      text-align: left;
+      font-family: monospace;
+      font-size: 17px;
+    }
+
+    .chart span {
+      padding: 7px 9px;
+      background: #301c26;
+      border-radius: 4px;
+    }
+
+    /* SHARED TIMER */
+
+    #escapeRoomTimer {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 20;
+      padding: 12px 16px;
+      border: 2px solid #ff4656;
+      border-radius: 10px;
+      background: #210d15;
+      color: #ff929a;
+      font-size: 16px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 0 0 20px #ff000044;
+    }
+
+    #escapeRoomTimer.urgent {
+      background: #850000;
+      color: white;
+      animation: escapeBlink 0.7s infinite;
+    }
+
+    @keyframes escapeBlink {
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    /* TIMEOUT SCREEN */
+
+    #escapeRoomTimeout {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      text-align: center;
+      color: white;
+      background: radial-gradient(
+        ellipse at center,
+        #3c101b,
+        #09090c 75%
+      );
+    }
+
+    #escapeRoomTimeout h2 {
+      color: #ff4656;
+      font-size: clamp(32px, 7vw, 56px);
+      text-shadow: 0 0 22px #f00;
+    }
+
+    #escapeRoomTimeout p {
+      color: #ffb1b7;
+    }
+
+    @media (max-width: 600px) {
+      .teacher-area {
+        bottom: 5px;
+        left: 5px;
+        gap: 7px;
+      }
+
+      .teacher-image {
+        width: 115px;
+        max-height: 160px;
+      }
+
+      .teacher-message {
+        max-width: min(185px, 48vw);
+        padding: 10px 12px;
+        margin-bottom: 40px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .game {
+        padding: 21px 13px;
+      }
+
+      .chart {
+        grid-template-columns: repeat(2, 1fr);
+        font-size: 16px;
+      }
+
+      .buttons {
+        gap: 7px;
+      }
+
+      button {
+        padding: 11px 12px;
+        font-size: 12px;
+      }
+
+      #escapeRoomTimer {
+        top: 5px;
+        right: 5px;
+        padding: 7px 9px;
+        font-size: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SHARED 20-MINUTE TIMER -->
+
+  <div
+    id="escapeRoomTimer"
+    role="timer"
+    aria-label="Escape room time remaining"
+  >
+    ⏰ ESCAPE ROOM 15:00
+  </div>
+
+  <!-- TIMEOUT -->
+
+  <div
+    id="escapeRoomTimeout"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="escapeTimeoutTitle"
+  >
+    <div style="font-size:75px">⏰</div>
+
+    <h2 id="escapeTimeoutTitle">TIME'S UP!</h2>
+
+    <h3>YOU DIDN'T ESCAPE THE ROOM!</h3>
+
+    <p>The 15-minute countdown has ended.</p>
+
+    <button id="restartEscapeBtn">
+      ↻ TRY AGAIN
+    </button>
+  </div>
+
+  <!-- MAIN GAME -->
+
+  <div class="page">
+    <main class="game">
+
+      <p class="subtitle">
+        HACKED // MEDIUM CHALLENGE
+      </p>
+
+      <h1>📡 SIGNAL RECOVERY</h1>
+
+      <p class="instructions">
+        Watch the light flashes to decode 3 letters.
+        <br>
+        Short flash = dot (·), long flash = dash (−).
+      </p>
+
+      <!-- SIGNAL LIGHT -->
+
+      <section class="signal-panel">
+
+        <div class="bulb" id="light"></div>
+
+        <div class="letter" id="letterIndicator">
+          LETTER 1 OF 3
+        </div>
+
+        <p id="playStatus" aria-live="polite">
+          READY TO START
+        </p>
+
+      </section>
+
+      <!-- CONTROLS -->
+
+      <div class="buttons">
+        <button class="play" id="playBtn">
+          ▶ PLAY
+        </button>
+
+ 
+
+        <button class="next" id="nextBtn" disabled>
+          NEXT →
+        </button>
+
+        <button id="resetBtn">
+          ↻ RESET
+        </button>
+      </div>
+
+      <!-- ANSWER -->
+
+      <div class="answer-label">
+        03 // DECRYPTED PASSWORD
+      </div>
+
+      <input
+        id="answer"
+        type="text"
+        maxlength="3"
+        placeholder="ENTER 3 LETTERS"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Three-letter password"
+      >
+
+      <div class="buttons">
+        <button id="unlockBtn">
+          🔓 UNLOCK SIGNAL
+        </button>
+
+        <button class="hint" id="hintBtn">
+          💡 HINT
+        </button>
+      </div>
+
+      <!-- FEEDBACK -->
+
+      <div
+        id="feedback"
+        role="alert"
+        aria-live="assertive"
+      ></div>
+
+      <!-- MORSE CHART -->
+
+      <div class="hint-box" id="hintBox">
+
+        <strong>MORSE CODE A–Z</strong>
+
+        <p class="instructions">
+          Dot = short flash · Dash = long flash
+        </p>
+
+        <div class="chart" id="chart"></div>
+
+      </div>
+
+      <!-- BACK -->
+
+      <button class="back" id="backBtn">
+        ← BACK TO CHALLENGES
+      </button>
+
+    </main>
+  </div>
+
+  <!-- TEACHER -->
+
+  <div class="teacher-area">
+
+    <img
+      id="teacherImage"
+      class="teacher-image"
+      src="Thinking.png"
+      alt="Teacher thinking"
+    >
+
+    <div
+      id="teacherMessage"
+      class="teacher-message"
+    >
+      Hmm... let's decode the signal!
+    </div>
+
+  </div>
+
+  <script>
+    "use strict";
+
+    // ========================================
+    // SHARED GAME SETTINGS
+    // ========================================
+
+    const ESCAPE_END_KEY = "escapeRoomEndTime";
+    const ESCAPE_TIMEOUT_KEY = "escapeRoomTimedOut";
+    const ESCAPE_FINISHED_KEY = "escapeRoomFinished";
+
+    const GAME_DURATION = 15 * 60 * 1000;
+
+    // ========================================
+    // HTML ELEMENTS
+    // ========================================
+
+    const light = document.getElementById("light");
+    const statusText = document.getElementById("playStatus");
+    const indicator = document.getElementById("letterIndicator");
+
+    const playBtn = document.getElementById("playBtn");
+   
+    const nextBtn = document.getElementById("nextBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const hintBtn = document.getElementById("hintBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    const answerInput = document.getElementById("answer");
+    const feedback = document.getElementById("feedback");
+    const hintBox = document.getElementById("hintBox");
+    const chart = document.getElementById("chart");
+
+    const teacherImage = document.getElementById("teacherImage");
+    const teacherMessage = document.getElementById("teacherMessage");
+
+    const timerElement = document.getElementById("escapeRoomTimer");
+    const timeoutScreen = document.getElementById("escapeRoomTimeout");
+
+    // ========================================
+    // SHARED SECRET WORD
+    // ========================================
+
+    const WORD_POOL = [
+      "ALGORITHMS",
+      "AUTOMATION",
+      "BLOCKCHAIN",
+      "BOOTLOADER",
+      "CLUSTERING",
+      "CONTAINERS",
+      "CONTROLLER",
+      "DATACENTER",
+      "DEPLOYMENT",
+      "DEVELOPERS",
+      "EXECUTABLE",
+      "FILESYSTEM",
+      "HARDDRIVES",
+      "HYPERVISOR",
+      "JAVASCRIPT",
+      "KUBERNETES",
+      "MAINFRAMES",
+      "MICROCHIPS",
+      "MIDDLEWARE",
+      "MONITORING",
+      "NETWORKING",
+      "PARAMETERS",
+      "POWERSHELL",
+      "PROCESSING",
+      "PROCESSORS",
+      "PROGRAMMER",
+      "REPOSITORY",
+      "RESOLUTION",
+      "SEMAPHORES",
+      "SERVERLESS",
+      "SIMULATION",
+      "SUBROUTINE",
+      "TECHNOLOGY",
+      "THROUGHPUT",
+      "TRANSISTOR",
+      "TYPESCRIPT",
+      "VERSIONING",
+      "WEBMASTERS",
+      "WORKSPACES"
+    ].filter(word => word.length === 10);
+
+    function getSharedSecretWord() {
+      let word = sessionStorage.getItem("secretWord");
+
+      // Normally screen4.html creates this first.
+      // This fallback prevents errors when
+      // the Morse page is opened directly.
+
+      if (!word || !/^[A-Z]{10}$/.test(word)) {
+        word = WORD_POOL[
+          Math.floor(Math.random() * WORD_POOL.length)
+        ];
+
+        sessionStorage.setItem("secretWord", word);
+      }
+
+      return word;
+    }
+
+    const fullSecretWord = getSharedSecretWord();
+
+    // MEDIUM receives letters 4, 5 and 6.
+    const secretWord = fullSecretWord.slice(3, 6);
+
+    // ========================================
+    // MORSE CODE ALPHABET
+    // ========================================
+
+    const morse = {
+      A: ".-",
+      B: "-...",
+      C: "-.-.",
+      D: "-..",
+      E: ".",
+      F: "..-.",
+      G: "--.",
+      H: "....",
+      I: "..",
+      J: ".---",
+      K: "-.-",
+      L: ".-..",
+      M: "--",
+      N: "-.",
+      O: "---",
+      P: ".--.",
+      Q: "--.-",
+      R: ".-.",
+      S: "...",
+      T: "-",
+      U: "..-",
+      V: "...-",
+      W: ".--",
+      X: "-..-",
+      Y: "-.--",
+      Z: "--.."
+    };
+
+    // ========================================
+    // GAME STATE
+    // ========================================
+
+    let currentLetter = 0;
+    let playing = false;
+    let finished = false;
+    let playbackToken = 0;
+    let overallEscapeExpired = false;
+
+    const sleep = milliseconds =>
+      new Promise(resolve => setTimeout(resolve, milliseconds));
+
+    // ========================================
+    // TEACHER REACTIONS
+    // ========================================
+
+    function showThinkingTeacher() {
+      teacherImage.src = "Thinking.png";
+      teacherImage.alt = "Teacher thinking";
+
+      teacherMessage.textContent =
+        "Hmm... let's decode the signal!";
+
+      teacherMessage.classList.remove("hidden");
+    }
+
+    function showWatchingTeacher() {
+      teacherImage.src = "Watching.png";
+      teacherImage.alt = "Teacher watching";
+
+      // No speech bubble while playing.
+      teacherMessage.classList.add("hidden");
+    }
+
+    function showJoyfulTeacher() {
+      teacherImage.src = "Joyful.png";
+      teacherImage.alt = "Teacher celebrating";
+
+      teacherMessage.textContent =
+        "YAY! WE GOT THE ANSWER!";
+
+      teacherMessage.classList.remove("hidden");
+    }
+
+    // ========================================
+    // SCRAMBLED REWARD LETTERS
+    // ========================================
+
+    function scrambleLetters(letters) {
+      const storageKey = "mediumRewardLetters";
+
+      const saved = sessionStorage.getItem(storageKey);
+
+      // Reuse the same reward for this game.
+      if (
+        saved &&
+        [...saved].sort().join("") ===
+        [...letters].sort().join("")
+      ) {
+        return saved;
+      }
+
+      const mixed = [...letters];
+
+      // Fisher-Yates shuffle.
+      for (let i = mixed.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [mixed[i], mixed[j]] = [mixed[j], mixed[i]];
+      }
+
+      // Avoid showing the original order
+      // when a different order is possible.
+      if (
+        mixed.join("") === letters &&
+        new Set(mixed).size > 1
+      ) {
+        const differentIndex = mixed.findIndex(
+          letter => letter !== mixed[0]
+        );
+
+        [mixed[0], mixed[differentIndex]] =
+          [mixed[differentIndex], mixed[0]];
+      }
+
+      const reward = mixed.join("");
+
+      sessionStorage.setItem(storageKey, reward);
+
+      return reward;
+    }
+
+    // ========================================
+    // FEEDBACK
+    // ========================================
+
+    function showFeedback(message, type) {
+      feedback.textContent = message;
+      feedback.className = type;
+    }
+
+    // ========================================
+    // BUTTON STATES
+    // ========================================
+
+    function updateControls() {
+      indicator.textContent =
+        `LETTER ${currentLetter + 1} OF 3`;
+
+      playBtn.disabled = playing;
+
+      nextBtn.disabled =
+        playing ||
+        !finished ||
+        currentLetter === 2;
+    }
+
+    // ========================================
+    // PLAY MORSE SIGNAL
+    // ========================================
+
+    async function playMorse(dotTime) {
+      if (!escapeTimeAvailable()) return;
+      if (playing) return;
+
+      const token = ++playbackToken;
+
+      playing = true;
+      finished = false;
+
+      showWatchingTeacher();
+      updateControls();
+
+      statusText.textContent = "RECEIVING SIGNAL...";
+      statusText.style.color = "#ffeb3b";
+
+      const letter = secretWord[currentLetter];
+      const code = morse[letter];
+
+      if (!code) {
+        playing = false;
+        statusText.textContent = "SIGNAL ERROR";
+        updateControls();
+        return;
+      }
+
+      for (const symbol of code) {
+        if (
+          token !== playbackToken ||
+          !escapeTimeAvailable()
+        ) {
+          return;
+        }
+
+        light.classList.add("on");
+
+        const duration =
+          symbol === "." ? dotTime : dotTime * 3;
+
+        await sleep(duration);
+
+        if (
+          token !== playbackToken ||
+          !escapeTimeAvailable()
+        ) {
+          return;
+        }
+
+        light.classList.remove("on");
+
+        await sleep(dotTime);
+      }
+
+      if (
+        token !== playbackToken ||
+        !escapeTimeAvailable()
+      ) {
+        return;
+      }
+
+      playing = false;
+      finished = true;
+
+      statusText.textContent =
+        currentLetter === 2
+          ? "ALL SIGNALS PLAYED — ENTER YOUR ANSWER"
+          : "SIGNAL COMPLETE — PRESS NEXT";
+
+      statusText.style.color = "#45df83";
+
+      updateControls();
+    }
+
+    // ========================================
+    // CHECK PLAYER ANSWER
+    // ========================================
+
+    function checkAnswer() {
+      if (!escapeTimeAvailable()) return;
+
+      const guess = answerInput.value
+        .trim()
+        .toUpperCase();
+
+      if (!/^[A-Z]{3}$/.test(guess)) {
+        showFeedback(
+          "❌ ENTER EXACTLY 3 LETTERS",
+          "error"
+        );
+
+        return;
+      }
+
+      if (guess !== secretWord) {
+        showFeedback(
+          "❌ ACCESS DENIED — WRONG CODE",
+          "error"
+        );
+
+        return;
+      }
+
+      // The correct answer stays unchanged.
+      // Only the collected reward is mixed.
+      const reward = scrambleLetters(secretWord);
+
+      sessionStorage.setItem("mediumComplete", "true");
+
+      showFeedback(
+        "🔓 ACCESS GRANTED — SIGNAL RESTORED! " +
+        "COLLECTED LETTERS: " + reward,
+        "success"
+      );
+
+      showJoyfulTeacher();
+    }
+
+    // ========================================
+    // RESET MORSE PUZZLE
+    // ========================================
+
+    function resetGame() {
+      if (!escapeTimeAvailable()) return;
+
+      playbackToken++;
+
+      currentLetter = 0;
+      playing = false;
+      finished = false;
+
+      light.classList.remove("on");
+
+      statusText.textContent = "READY TO START";
+      statusText.style.color = "#aaa";
+
+      answerInput.value = "";
+
+      feedback.textContent = "";
+      feedback.className = "";
+
+      hintBox.classList.remove("visible");
+
+      showThinkingTeacher();
+      updateControls();
+    }
+
+    // ========================================
+    // CREATE MORSE HINT CHART
+    // ========================================
+
+    function createMorseChart() {
+      chart.innerHTML = Object.entries(morse)
+        .map(([letter, code]) =>
+          `<span>${letter} = ${code}</span>`
+        )
+        .join("");
+    }
+
+    // ========================================
+    // SHARED 20-MINUTE TIMER
+    // ========================================
+
+    function initializeTimer() {
+      const existingEnd = Number(
+        sessionStorage.getItem(ESCAPE_END_KEY)
+      );
+
+      // Do NOT restart an existing timer.
+      if (
+        !Number.isFinite(existingEnd) ||
+        existingEnd <= 0
+      ) {
+        sessionStorage.setItem(
+          ESCAPE_END_KEY,
+          String(Date.now() + GAME_DURATION)
+        );
+      }
+    }
+
+    function showOverallTimeout() {
+      if (overallEscapeExpired) return;
+
+      overallEscapeExpired = true;
+
+      sessionStorage.setItem(
+        ESCAPE_TIMEOUT_KEY,
+        "true"
+      );
+
+      // Stop Morse playback.
+      playbackToken++;
+      playing = false;
+
+      light.classList.remove("on");
+
+      timerElement.textContent =
+        "⏰ ESCAPE ROOM 00:00";
+
+      timeoutScreen.style.display = "flex";
+    }
+
+    function escapeTimeAvailable() {
+      if (overallEscapeExpired) {
+        return false;
+      }
+
+      const endTime = Number(
+        sessionStorage.getItem(ESCAPE_END_KEY)
+      );
+
+      if (
+        sessionStorage.getItem(ESCAPE_TIMEOUT_KEY) === "true" ||
+        !Number.isFinite(endTime) ||
+        Date.now() >= endTime
+      ) {
+        showOverallTimeout();
+        return false;
+      }
+
+      return true;
+    }
+
+    function updateOverallEscapeTimer() {
+      if (overallEscapeExpired) return;
+
+      const endTime = Number(
+        sessionStorage.getItem(ESCAPE_END_KEY)
+      );
+
+      const remaining = Math.max(
+        0,
+        endTime - Date.now()
+      );
+
+      const totalSeconds = Math.ceil(
+        remaining / 1000
+      );
+
+      const minutes = Math.floor(
+        totalSeconds / 60
+      );
+
+      const seconds = totalSeconds % 60;
+
+      timerElement.textContent =
+        "⏰ ESCAPE ROOM " +
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+      timerElement.classList.toggle(
+        "urgent",
+        totalSeconds <= 60
+      );
+
+      if (
+        remaining <= 0 ||
+        sessionStorage.getItem(ESCAPE_TIMEOUT_KEY) === "true"
+      ) {
+        showOverallTimeout();
+      }
+    }
+
+    // ========================================
+    // BUTTON EVENTS
+    // ========================================
+
+    playBtn.addEventListener("click", () => {
+      playMorse(500);
+    });
+
+
+    nextBtn.addEventListener("click", () => {
+      if (!escapeTimeAvailable()) return;
+
+      if (
+        playing ||
+        !finished ||
+        currentLetter === 2
+      ) {
+        return;
+      }
+
+      currentLetter++;
+      finished = false;
+
+      statusText.textContent = "READY TO START";
+      statusText.style.color = "#aaa";
+
+      updateControls();
+    });
+
+    resetBtn.addEventListener(
+      "click",
+      resetGame
+    );
+
+    unlockBtn.addEventListener(
+      "click",
+      checkAnswer
+    );
+
+    answerInput.addEventListener(
+      "keydown",
+      event => {
+        if (event.key === "Enter") {
+          checkAnswer();
+        }
+      }
+    );
+
+    hintBtn.addEventListener("click", () => {
+      if (!escapeTimeAvailable()) return;
+
+      hintBox.classList.toggle("visible");
+    });
+
+    backBtn.addEventListener("click", () => {
+      window.location.href = "screen4.html";
+    });
+
+    document.getElementById(
+      "restartEscapeBtn"
+    ).addEventListener("click", () => {
+
+      const keysToClear = [
+        ESCAPE_END_KEY,
+        ESCAPE_TIMEOUT_KEY,
+        ESCAPE_FINISHED_KEY,
+        "easyComplete",
+        "mediumComplete",
+        "hardComplete",
+        "secretWord",
+        "easyRewardLetters",
+        "mediumRewardLetters",
+        "hardRewardLetters"
+      ];
+
+      for (const key of keysToClear) {
+        sessionStorage.removeItem(key);
+      }
+
+      window.location.href = "screen4.html";
+    });
+
+    // ========================================
+    // START GAME
+    // ========================================
+
+    initializeTimer();
+
+    createMorseChart();
+    updateControls();
+    showThinkingTeacher();
+
+    updateOverallEscapeTimer();
+
+    setInterval(
+      updateOverallEscapeTimer,
+      250
+    );
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HACKED // HARD — Binary Decryption</title>
+
+<style>
+:root {
+  --red: #ff454e;
+  --green: #48e69b;
+  --panel: #170e13;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 26px 16px 150px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(
+    ellipse at 50% 10%,
+    #371019,
+    #09090c 65%
+  );
+}
+
+header {
+  text-align: center;
+  max-width: 760px;
+  margin: auto;
+}
+
+.subtitle {
+  color: #ff616a;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+h1 {
+  color: var(--red);
+  text-shadow: 0 0 18px #bd0000;
+  font-size: clamp(27px, 5vw, 42px);
+  margin: 12px 0;
+}
+
+.instructions {
+  color: #c9a7ad;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.timer {
+  position: sticky;
+  top: 10px;
+  z-index: 8;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 0 auto;
+  padding: 10px 16px;
+  background: #210d15;
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  color: #ff777f;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 18px #ff000044;
+}
+
+.timer.urgent {
+  background: #850000;
+  color: white;
+  animation: blink .65s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: .5;
+  }
+}
+
+.game {
+  max-width: 850px;
+  margin: 24px auto;
+  padding: 25px;
+  background: #140d11;
+  border: 1px solid #b43a42;
+  border-radius: 15px;
+  box-shadow: 0 0 35px #7a151b55;
+}
+
+.section-title {
+  color: #ff9ba1;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 17px;
+}
+
+.attempts {
+  max-width: 400px;
+  margin: 0 auto 22px;
+  padding: 13px;
+  text-align: center;
+  background: #250f18;
+  border: 1px solid #b43a42;
+  border-radius: 9px;
+}
+
+.attempts-label {
+  color: #ffb1b7;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 900;
+  margin-bottom: 9px;
+}
+
+.attempt-icons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  font-size: 24px;
+}
+
+.attempt-icon {
+  color: #ff626b;
+  text-shadow: 0 0 10px #ff454e55;
+}
+
+.attempt-icon.lost {
+  color: #55444a;
+  text-shadow: none;
+}
+
+.attempt-count {
+  color: #ffb1b7;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 9px;
+}
+
+.codes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.code-card {
+  background: #211319;
+  border: 1px solid #b34a57;
+  border-radius: 11px;
+  padding: 21px 8px;
+  text-align: center;
+}
+
+.code-card small {
+  display: block;
+  color: #ff9da3;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.bits {
+  font-family: Consolas, 'Courier New', monospace;
+  color: #fff;
+  font-weight: 900;
+  font-size: clamp(16px, 3vw, 27px);
+  letter-spacing: 2px;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 12px #ff454e77;
+}
+
+.math-work {
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px;
+  background: #100b10;
+  border: 1px solid #6e303b;
+  border-radius: 6px;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  outline: none;
+}
+
+.math-work:focus {
+  border-color: #ff6565;
+}
+
+.math-work.invalid {
+  border-color: #ff454e;
+  box-shadow: 0 0 12px #ff454e55;
+}
+
+.math-work.valid {
+  border-color: var(--green);
+}
+
+.math-guide {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  margin: 12px 0 18px;
+}
+
+.math-guide div {
+  text-align: center;
+  padding: 8px 1px;
+  background: #2c1a20;
+  border: 1px solid #7d3541;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: clamp(10px, 2vw, 15px);
+}
+
+.answer-area {
+  text-align: center;
+  margin: 25px auto 8px;
+  max-width: 430px;
+}
+
+.answer-area label {
+  display: block;
+  color: #ffb1b7;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+#answer {
+  width: 100%;
+  padding: 15px;
+  background: #09090c;
+  border: 1px solid #b43a42;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+#answer:focus {
+  border-color: #ff6565;
+  box-shadow: 0 0 12px #ff454533;
+}
+
+.status {
+  min-height: 36px;
+  margin-top: 14px;
+  text-align: center;
+  color: #ffb1b7;
+  font-weight: bold;
+  line-height: 1.6;
+}
+
+.status.success {
+  color: var(--green);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 11px;
+  margin-top: 15px;
+}
+
+button {
+  padding: 13px 20px;
+  background: #c62828;
+  color: white;
+  border: 0;
+  border-radius: 7px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #f34650;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #311b24;
+  border: 1px solid #e34b54;
+}
+
+button.secondary:hover {
+  background: #672027;
+}
+
+.hint-panel {
+  display: none;
+  margin-top: 23px;
+  background: #211319;
+  border: 1px solid #b34a57;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.hint-panel.show {
+  display: block;
+}
+
+.hint-panel h2 {
+  text-align: center;
+  color: #ff9ba1;
+  font-size: 17px;
+}
+
+.hint-panel p {
+  text-align: center;
+  color: #c9a7ad;
+  font-size: 13px;
+}
+
+.alphabet {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.alphabet-item {
+  background: #120d11;
+  border: 1px solid #78313c;
+  border-radius: 6px;
+  padding: 10px 5px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.alphabet-item strong {
+  display: block;
+  color: #ff858c;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.alphabet-item span {
+  font-family: Consolas, 'Courier New', monospace;
+  overflow-wrap: anywhere;
+}
+
+.teacher-area {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  z-index: 7;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  max-width: min(550px, calc(100vw - 20px));
+  pointer-events: none;
+}
+
+.teacher-image {
+  width: clamp(100px, 15vw, 150px);
+  max-height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px #0009);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #050507ed;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.result {
+  max-width: 480px;
+  width: 100%;
+  background: #101a17;
+  border: 2px solid #42e69a;
+  border-radius: 16px;
+  box-shadow: 0 0 60px #16ba6b50;
+  text-align: center;
+  padding: 30px 22px;
+}
+
+.result h2 {
+  color: #6dffb0;
+  font-size: 32px;
+}
+
+.result p {
+  color: #bcebd3;
+}
+
+.reward {
+  font-size: clamp(40px, 9vw, 65px);
+  letter-spacing: 9px;
+  font-weight: 900;
+  text-shadow: 0 0 18px #2eff91;
+  margin: 15px 0;
+}
+
+.result img {
+  max-width: 160px;
+  max-height: 160px;
+  object-fit: contain;
+}
+
+.failure-result {
+  background: #210e15;
+  border-color: #ff454e;
+  box-shadow: 0 0 60px #ff000044;
+}
+
+.failure-result h2 {
+  color: #ff626b;
+}
+
+.failure-result p {
+  color: #ffb1b7;
+}
+
+.timeout {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(
+    ellipse at center,
+    #3c101b,
+    #09090c 75%
+  );
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 25px;
+}
+
+.timeout h2 {
+  color: var(--red);
+  font-size: clamp(32px, 7vw, 56px);
+}
+
+.timeout p {
+  color: #ffb1b7;
+}
+
+.footer {
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .game {
+    padding: 15px;
+  }
+
+  .codes {
+    gap: 9px;
+  }
+
+  .code-card {
+    padding: 16px 4px;
+  }
+
+  .bits {
+    letter-spacing: 0;
+    font-size: clamp(13px, 3.4vw, 19px);
+  }
+
+  .alphabet {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .teacher-image {
+    width: 95px;
+  }
+
+  body {
+    padding-bottom: 160px;
+  }
+
+  .timer {
+    margin: 0 auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="timer" id="escapeRoomTimer">
+  ⏰ ESCAPE ROOM 15:00
+</div>
+
+<header>
+  <p class="subtitle">
+    HACKED // HARD CHALLENGE
+  </p>
+
+  <h1>💻 BINARY DECRYPTION</h1>
+
+  <p class="instructions">
+    The hacker encrypted the final access code!
+    Decode all four binary signals IN ORDER.
+    For each signal, ADD the place values wherever
+    the bit is 1, then enter its decimal total.
+    Convert each total to an ASCII letter and
+    enter the four-letter code.
+    <strong>You have only 3 attempts!</strong>
+    If all attempts are lost, HARD restarts,
+    but the escape-room timer keeps running.
+  </p>
+</header>
+
+<main class="game">
+
+  <div class="section-title">
+    ◈ ENCRYPTED SYSTEM SIGNALS ◈
+  </div>
+
+  <div class="attempts">
+    <div class="attempts-label">
+      ⚠️ DECRYPTION ATTEMPTS
+    </div>
+
+    <div class="attempt-icons" id="attemptIcons">
+      <span class="attempt-icon">♥</span>
+      <span class="attempt-icon">♥</span>
+      <span class="attempt-icon">♥</span>
+    </div>
+
+    <div class="attempt-count" id="attemptCount">
+      3 ATTEMPTS REMAINING
+    </div>
+  </div>
+
+  <div class="codes" id="codes"></div>
+
+  <div class="answer-area">
+    <label for="answer">
+      ENTER THE 4 DECODED LETTERS
+    </label>
+
+    <input
+      id="answer"
+      aria-label="Four decoded letters"
+      autocomplete="off"
+      maxlength="4"
+      placeholder="ABCD"
+      spellcheck="false"
+    >
+
+    <div class="status" id="status" role="status">
+      Fill in all 4 decimal totals and the
+      4-letter code before decrypting.
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="checkBtn">
+      🔓 DECRYPT CODE
+    </button>
+
+    <button
+      class="secondary"
+      id="hintBtn"
+      aria-controls="hintPanel"
+      aria-expanded="false"
+    >
+      💡 SHOW HINT
+    </button>
+
+    <button class="secondary" id="backBtn">
+      ← BACK TO CHALLENGES
+    </button>
+  </div>
+
+  <section class="hint-panel" id="hintPanel">
+    <h2>📖 BINARY MATH HINT</h2>
+
+    <p>
+      Each 1 means ADD the value above it;
+      each 0 means skip it.
+      Example: 01000011 = 64 + 2 + 1 = 67 = C.
+    </p>
+
+    <div class="math-guide">
+      <div>128</div>
+      <div>64</div>
+      <div>32</div>
+      <div>16</div>
+      <div>8</div>
+      <div>4</div>
+      <div>2</div>
+      <div>1</div>
+    </div>
+
+    <p>ASCII decimal values for A–Z:</p>
+
+    <div class="alphabet" id="alphabet"></div>
+  </section>
+
+</main>
+
+<p class="footer">
+  HACKED // ESCAPE ROOM
+</p>
+
+<div class="teacher-area">
+  <img
+    src="Watching.png"
+    alt="Teacher watching"
+    class="teacher-image"
+    id="teacherImage"
+  >
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="overlay" id="winOverlay">
+  <div class="result">
+    <img
+      src="Joyful.png"
+      alt="Teacher celebrating"
+    >
+
+    <h2>🔓 ACCESS GRANTED!</h2>
+
+    <p>YOU CRACKED THE BINARY CODE!</p>
+
+    <p>YOUR FINAL 4 LETTERS</p>
+
+    <div class="reward" id="reward"></div>
+
+    <p>
+      Combine these with EASY and MEDIUM
+      to unlock the final system.
+    </p>
+
+    <button id="continueBtn">
+      CONTINUE TO CHALLENGES
+    </button>
+  </div>
+</div>
+
+<!-- THREE ATTEMPTS LOST -->
+<div class="overlay" id="failureOverlay">
+  <div class="result failure-result">
+
+    <div style="font-size:65px">💀</div>
+
+    <h2>ACCESS DENIED!</h2>
+
+    <p>
+      YOU USED ALL 3 DECRYPTION ATTEMPTS!
+    </p>
+
+    <p>
+      HARD will restart with 3 fresh attempts.
+      Your EASY and MEDIUM progress will stay saved.
+    </p>
+
+    <p>
+      ⚠️ The escape-room timer will NOT reset.
+    </p>
+
+    <button id="retryHardBtn">
+      ↻ RESTART HARD
+    </button>
+  </div>
+</div>
+
+<!-- SHARED TIMER TIMEOUT -->
+<div class="timeout" id="timeoutScreen">
+  <div style="font-size:75px">⏰</div>
+
+  <h2>TIME'S UP!</h2>
+
+  <h3>YOU DIDN'T ESCAPE THE ROOM!</h3>
+
+  <p>
+    The shared 15-minute countdown has ended.
+  </p>
+
+  <button id="restartBtn">
+    ↻ TRY AGAIN
+  </button>
+</div>
+
+<script>
+"use strict";
+
+// ==========================================
+// SHARED ESCAPE ROOM SETTINGS
+// ==========================================
+
+const GAME_MINUTES = 15;
+
+const END_KEY = "escapeRoomEndTime";
+const TIMEOUT_KEY = "escapeRoomTimedOut";
+const FINISHED_KEY = "escapeRoomFinished";
+
+const HARD_ATTEMPTS_KEY = "hardAttemptsUsed";
+const HARD_WORD_KEY = "hardAttemptsWord";
+
+const MAX_ATTEMPTS = 3;
+
+const $ = (id) => document.getElementById(id);
+
+// ==========================================
+// SHARED SECRET PASSWORD
+// ==========================================
+
+const words = [
+  "ALGORITHMS",
+  "AUTOMATION",
+  "BLOCKCHAIN",
+  "BOOTLOADER",
+  "CLUSTERING",
+  "CONTAINERS",
+  "CONTROLLER",
+  "DATACENTER",
+  "DEPLOYMENT",
+  "DEVELOPERS",
+  "EXECUTABLE",
+  "FILESYSTEM",
+  "HARDDRIVES",
+  "HYPERVISOR",
+  "JAVASCRIPT",
+  "KUBERNETES",
+  "MAINFRAMES",
+  "MICROCHIPS",
+  "MIDDLEWARE",
+  "MONITORING",
+  "NETWORKING",
+  "PARAMETERS",
+  "POWERSHELL",
+  "PROCESSING",
+  "PROCESSORS",
+  "PROGRAMMER",
+  "REPOSITORY",
+  "RESOLUTION",
+  "SEMAPHORES",
+  "SERVERLESS",
+  "SIMULATION",
+  "SUBROUTINE",
+  "TECHNOLOGY",
+  "THROUGHPUT",
+  "TRANSISTOR",
+  "TYPESCRIPT",
+  "VERSIONING",
+  "WEBMASTERS",
+  "WORKSPACES"
+].filter(word => word.length === 10);
+
+let secretWord = sessionStorage.getItem("secretWord");
+
+if (!secretWord || !/^[A-Z]{10}$/.test(secretWord)) {
+  secretWord = words[
+    Math.floor(Math.random() * words.length)
+  ];
+
+  sessionStorage.setItem("secretWord", secretWord);
+}
+
+// HARD always owns the LAST FOUR letters.
+// Never change this order or these positions.
+
+const hardLetters = secretWord.slice(6, 10);
+
+function toBinary(letter) {
+  return letter
+    .charCodeAt(0)
+    .toString(2)
+    .padStart(8, "0");
+}
+
+// ==========================================
+// HARD ATTEMPTS
+// ==========================================
+
+// If a new secret word starts, reset attempts.
+// Otherwise keep attempts across page reloads
+// and trips back to the challenge hub.
+
+if (
+  sessionStorage.getItem(HARD_WORD_KEY) !== secretWord
+) {
+  sessionStorage.setItem(HARD_WORD_KEY, secretWord);
+  sessionStorage.setItem(HARD_ATTEMPTS_KEY, "0");
+}
+
+let attemptsUsed = Number(
+  sessionStorage.getItem(HARD_ATTEMPTS_KEY) || "0"
+);
+
+if (
+  !Number.isInteger(attemptsUsed) ||
+  attemptsUsed < 0 ||
+  attemptsUsed > MAX_ATTEMPTS
+) {
+  attemptsUsed = 0;
+  sessionStorage.setItem(HARD_ATTEMPTS_KEY, "0");
+}
+
+let expired = false;
+let challengeCompleted = false;
+let hardLocked = false;
+
+// ==========================================
+// BUILD BINARY SIGNALS
+// ==========================================
+
+function buildSignals() {
+  const signals = [...hardLetters];
+
+  $("codes").innerHTML = signals.map(
+    (letter, index) => `
+      <div class="code-card">
+        <small>SIGNAL ${index + 1}</small>
+
+        <div class="bits">
+          ${toBinary(letter)}
+        </div>
+
+        <input
+          class="math-work"
+          type="text"
+          inputmode="numeric"
+          maxlength="3"
+          autocomplete="off"
+          placeholder="Your decimal total"
+          aria-label="Decimal total for signal ${index + 1}"
+        >
+      </div>
+    `
+  ).join("");
+
+  document.querySelectorAll(".math-work").forEach(
+    input => {
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "");
+        input.classList.remove("invalid", "valid");
+      });
+    }
+  );
+}
+
+// ==========================================
+// BUILD ASCII HINT CHART
+// ==========================================
+
+function buildAlphabet() {
+  $("alphabet").innerHTML = Array.from(
+    { length: 26 },
+    (_, index) => {
+      const letter = String.fromCharCode(65 + index);
+
+      return `
+        <div class="alphabet-item">
+          <strong>${letter}</strong>
+          <span>${65 + index}</span>
+        </div>
+      `;
+    }
+  ).join("");
+}
+
+// ==========================================
+// ATTEMPT DISPLAY
+// ==========================================
+
+function updateAttemptDisplay() {
+  const remaining = Math.max(
+    0,
+    MAX_ATTEMPTS - attemptsUsed
+  );
+
+  $("attemptIcons").innerHTML = Array.from(
+    { length: MAX_ATTEMPTS },
+    (_, index) => `
+      <span class="attempt-icon ${
+        index < remaining ? "" : "lost"
+      }">
+        ${index < remaining ? "♥" : "✖"}
+      </span>
+    `
+  ).join("");
+
+  $("attemptCount").textContent =
+    `${remaining} ATTEMPT${
+      remaining === 1 ? "" : "S"
+    } REMAINING`;
+}
+
+// ==========================================
+// STATUS MESSAGE
+// ==========================================
+
+function setStatus(message, success = false) {
+  $("status").textContent = message;
+
+  $("status").classList.toggle(
+    "success",
+    success
+  );
+}
+
+// ==========================================
+// HINT BUTTON
+// ==========================================
+
+$("hintBtn").addEventListener("click", () => {
+  const showing = $("hintPanel")
+    .classList.toggle("show");
+
+  $("hintBtn").textContent = showing
+    ? "🙈 HIDE HINT"
+    : "💡 SHOW HINT";
+
+  $("hintBtn").setAttribute(
+    "aria-expanded",
+    String(showing)
+  );
+});
+
+// ==========================================
+// ANSWER INPUT
+// ==========================================
+
+$("answer").addEventListener("input", () => {
+  $("answer").value = $("answer").value
+    .replace(/[^a-z]/gi, "")
+    .toUpperCase()
+    .slice(0, 4);
+});
+
+// ==========================================
+// SHARED 15-MINUTE TIMER
+// ==========================================
+
+if (!sessionStorage.getItem(END_KEY)) {
+  sessionStorage.setItem(
+    END_KEY,
+    String(Date.now() + GAME_MINUTES * 60 * 1000)
+  );
+}
+
+function showTimeout() {
+  if (expired) return;
+
+  expired = true;
+
+  sessionStorage.setItem(TIMEOUT_KEY, "true");
+
+  $("escapeRoomTimer").textContent =
+    "⏰ ESCAPE ROOM 00:00";
+
+  $("timeoutScreen").style.display = "flex";
+
+  $("answer").disabled = true;
+  $("checkBtn").disabled = true;
+
+  document.querySelectorAll(".math-work").forEach(
+    input => {
+      input.disabled = true;
+    }
+  );
+}
+
+function timeAvailable() {
+  const timedOut =
+    sessionStorage.getItem(TIMEOUT_KEY) === "true";
+
+  const deadline = Number(
+    sessionStorage.getItem(END_KEY)
+  );
+
+  const pastDeadline =
+    !Number.isFinite(deadline) ||
+    Date.now() >= deadline;
+
+  if (expired || timedOut || pastDeadline) {
+    showTimeout();
+    return false;
+  }
+
+  return true;
+}
+
+function updateTimer() {
+  if (expired) return;
+
+  const deadline = Number(
+    sessionStorage.getItem(END_KEY)
+  );
+
+  if (
+    !Number.isFinite(deadline) ||
+    sessionStorage.getItem(TIMEOUT_KEY) === "true"
+  ) {
+    showTimeout();
+    return;
+  }
+
+  const remaining = Math.max(
+    0,
+    deadline - Date.now()
+  );
+
+  const seconds = Math.ceil(remaining / 1000);
+
+  const minutesText = String(
+    Math.floor(seconds / 60)
+  ).padStart(2, "0");
+
+  const secondsText = String(
+    seconds % 60
+  ).padStart(2, "0");
+
+  $("escapeRoomTimer").textContent =
+    `⏰ ESCAPE ROOM ${minutesText}:${secondsText}`;
+
+  $("escapeRoomTimer").classList.toggle(
+    "urgent",
+    seconds <= 60
+  );
+
+  if (remaining <= 0) {
+    showTimeout();
+  }
+}
+
+// ==========================================
+// THIRD WRONG ATTEMPT
+// ==========================================
+
+function showHardFailure() {
+  hardLocked = true;
+
+  $("checkBtn").disabled = true;
+  $("answer").disabled = true;
+
+  document.querySelectorAll(".math-work").forEach(
+    input => {
+      input.disabled = true;
+    }
+  );
+
+  $("failureOverlay").classList.add("show");
+}
+
+// ==========================================
+// WRONG SUBMISSION
+// ==========================================
+
+function registerWrongAttempt() {
+  attemptsUsed++;
+
+  sessionStorage.setItem(
+    HARD_ATTEMPTS_KEY,
+    String(attemptsUsed)
+  );
+
+  updateAttemptDisplay();
+
+  $("teacherImage").src = "Watching.png";
+
+  const remaining = MAX_ATTEMPTS - attemptsUsed;
+
+  if (remaining <= 0) {
+    setStatus(
+      "💀 ACCESS DENIED — ALL 3 ATTEMPTS LOST!"
+    );
+
+    showHardFailure();
+    return;
+  }
+
+  if (remaining === 1) {
+    setStatus(
+      "⚠️ WRONG DECRYPTION! FINAL ATTEMPT REMAINING!"
+    );
+  } else {
+    setStatus(
+      `❌ ACCESS DENIED! ${remaining} ATTEMPTS LEFT!`
+    );
+  }
+}
+
+// ==========================================
+// CHECK ALL FOUR DECIMAL TOTALS
+// AND THE FOUR-LETTER PASSWORD
+// ==========================================
+
+function checkAnswer() {
+  if (!timeAvailable()) return;
+
+  if (challengeCompleted || hardLocked) return;
+
+  const guess = $("answer").value
+    .trim()
+    .toUpperCase();
+
+  const inputs = [
+    ...document.querySelectorAll(".math-work")
+  ];
+
+  const expectedTotals = [...hardLetters].map(
+    letter => letter.charCodeAt(0)
+  );
+
+  const enteredTotals = inputs.map(
+    input => input.value.trim()
+  );
+
+  // Require all fields to be filled before
+  // accepting a submission.
+  // Empty fields do not consume an attempt.
+
+  if (
+    enteredTotals.some(value => value === "") ||
+    !/^[A-Z]{4}$/.test(guess)
+  ) {
+    setStatus(
+      "⚠️ COMPLETE ALL 4 DECIMAL TOTALS AND ENTER EXACTLY 4 LETTERS!"
+    );
+
+    return;
+  }
+
+  let totalsCorrect = true;
+
+  inputs.forEach((input, index) => {
+    const entered = enteredTotals[index];
+
+    const correct =
+      /^\d{1,3}$/.test(entered) &&
+      Number(entered) === expectedTotals[index];
+
+    input.classList.toggle("valid", correct);
+    input.classList.toggle("invalid", !correct);
+
+    if (!correct) {
+      totalsCorrect = false;
+    }
+  });
+
+  const lettersCorrect = guess === hardLetters;
+
+  // BOTH parts must be correct.
+  // Guessing the letters alone is not enough.
+
+  if (!totalsCorrect || !lettersCorrect) {
+    registerWrongAttempt();
+    return;
+  }
+
+  // ========================================
+  // HARD COMPLETED
+  // ========================================
+
+  challengeCompleted = true;
+
+  sessionStorage.setItem("hardComplete", "true");
+
+  setStatus(
+    "🔓 ACCESS GRANTED — BINARY DECRYPTED!",
+    true
+  );
+
+  $("reward").textContent = hardLetters;
+
+  $("teacherImage").src = "Joyful.png";
+
+  $("checkBtn").disabled = true;
+
+  $("winOverlay").classList.add("show");
+}
+
+// ==========================================
+// RESTART HARD ONLY
+// ==========================================
+
+function restartHardOnly() {
+  if (!timeAvailable()) return;
+
+  // IMPORTANT:
+  // Do NOT clear secretWord.
+  // Do NOT clear the shared timer.
+  // Do NOT clear EASY or MEDIUM progress.
+
+  attemptsUsed = 0;
+  hardLocked = false;
+  challengeCompleted = false;
+
+  sessionStorage.setItem(
+    HARD_ATTEMPTS_KEY,
+    "0"
+  );
+
+  sessionStorage.removeItem("hardComplete");
+
+  $("failureOverlay").classList.remove("show");
+  $("winOverlay").classList.remove("show");
+
+  $("answer").value = "";
+  $("answer").disabled = false;
+
+  $("checkBtn").disabled = false;
+
+  $("teacherImage").src = "Watching.png";
+
+  $("hintPanel").classList.remove("show");
+
+  $("hintBtn").textContent = "💡 SHOW HINT";
+
+  $("hintBtn").setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  // Rebuild the four signals.
+  // They still decode to the same final
+  // four letters of the shared password.
+
+  buildSignals();
+
+  updateAttemptDisplay();
+
+  setStatus(
+    "🔄 HARD RESTARTED! YOU HAVE 3 NEW ATTEMPTS."
+  );
+
+  updateTimer();
+}
+
+// ==========================================
+// BUTTON EVENTS
+// ==========================================
+
+$("checkBtn").addEventListener(
+  "click",
+  checkAnswer
+);
+
+$("answer").addEventListener(
+  "keydown",
+  event => {
+    if (event.key === "Enter") {
+      checkAnswer();
+    }
+  }
+);
+
+$("retryHardBtn").addEventListener(
+  "click",
+  restartHardOnly
+);
+
+$("backBtn").addEventListener(
+  "click",
+  () => {
+    if (timeAvailable()) {
+      location.href = "screen4.html";
+    }
+  }
+);
+
+$("continueBtn").addEventListener(
+  "click",
+  () => {
+    if (timeAvailable()) {
+      location.href = "screen4.html";
+    }
+  }
+);
+
+// ==========================================
+// FULL ESCAPE ROOM RESTART
+// ONLY WHEN THE SHARED TIMER EXPIRES
+// ==========================================
+
+$("restartBtn").addEventListener(
+  "click",
+  () => {
+    [
+      END_KEY,
+      TIMEOUT_KEY,
+      FINISHED_KEY,
+
+      "easyComplete",
+      "mediumComplete",
+      "hardComplete",
+
+      "secretWord",
+
+      "easyTaskIds",
+      "easyTimerSeconds",
+      "easyRandomTasks",
+      "easyRandomGameWord",
+      "easyRewardLetters",
+
+      "mediumRewardLetters",
+
+      HARD_ATTEMPTS_KEY,
+      HARD_WORD_KEY
+    ].forEach(key => {
+      sessionStorage.removeItem(key);
+    });
+
+    location.href = "screen4.html";
+  }
+);
+
+// ==========================================
+// INITIALIZE HARD CHALLENGE
+// ==========================================
+
+buildSignals();
+buildAlphabet();
+updateAttemptDisplay();
+
+if (
+  sessionStorage.getItem("hardComplete") === "true"
+) {
+  challengeCompleted = true;
+
+  $("reward").textContent = hardLetters;
+
+  $("teacherImage").src = "Joyful.png";
+
+  $("winOverlay").classList.add("show");
+} else if (attemptsUsed >= MAX_ATTEMPTS) {
+  showHardFailure();
+}
+
+updateTimer();
+
+setInterval(updateTimer, 250);
+
+</script>
+
+</body>
+</html>
